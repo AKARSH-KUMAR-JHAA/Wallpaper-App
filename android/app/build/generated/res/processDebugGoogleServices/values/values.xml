@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gcm_defaultSenderId" translatable="false">953178718235</string>
+    <string name="google_api_key" translatable="false">AIzaSyBhky4eaIOXOdXO9hXct7JOGMS71kkNrcw</string>
+    <string name="google_app_id" translatable="false">1:953178718235:android:2d1ee9cb72dd9ec6a3f8be</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBhky4eaIOXOdXO9hXct7JOGMS71kkNrcw</string>
+    <string name="google_storage_bucket" translatable="false">flutter-login-307ae.firebasestorage.app</string>
+    <string name="project_id" translatable="false">flutter-login-307ae</string>
+</resources>
