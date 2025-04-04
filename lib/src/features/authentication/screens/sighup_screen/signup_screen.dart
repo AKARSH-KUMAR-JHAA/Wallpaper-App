@@ -20,9 +20,9 @@ class SignupScreen extends StatelessWidget {
             child: Stack(
               children: [
                // Positioned(top: 0, child: Lottie.asset(signupAni1,width: size.width)),
-                Positioned(height: size.height*0.363, width: size.width, top: 0, child: header_form_widget(img:signupAni1 ,txt: onboardingheadline1,txt2: '')),
+                Positioned(height: size.height*0.3, width: size.width, top: 0, child: HeaderFormWidget(img:signupAni1 ,txt: onboardingheadline1,txt2: '')),
                 Positioned(width: size.width, bottom: -35, child: Lottie.asset(loginAni3,fit: BoxFit.fitWidth)),
-                Positioned(bottom: 185, width: size.width, child: form_field()),
+                Positioned(bottom: 185, width: size.width, child: SignupForm()),
                 Positioned(width: size.width, bottom: 35, child: FooterSignupWidget(size:size,txt1: 'already have an account? ',txt2: 'login',screen: LoginScreen(),))
 
               ],

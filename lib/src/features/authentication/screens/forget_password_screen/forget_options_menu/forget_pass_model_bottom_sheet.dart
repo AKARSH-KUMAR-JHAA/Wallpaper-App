@@ -37,7 +37,7 @@ class ForgetpasswordScreen {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 35),
-                  forget_pass_btn_widget(
+                  ForgetPassBtnWidget(
                     size: size,
                     iconbtn: Icons.email_outlined,
                     title: "E-Mail",
@@ -49,7 +49,7 @@ class ForgetpasswordScreen {
                   SizedBox(
                     height: 15,
                   ),
-                  forget_pass_btn_widget(size: size,
+                  ForgetPassBtnWidget(size: size,
                     iconbtn: Icons.phone_android_outlined,
                     title: "Phone-No",
                     subtitle: "Reset via Phone Verification",

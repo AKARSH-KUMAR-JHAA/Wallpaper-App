@@ -1,11 +1,11 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:login/src/exception/exception.dart';
 import 'package:login/src/exception/signup_email_password_failure.dart';
 import 'package:login/src/features/authentication/screens/dashboard_screen/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:login/src/features/authentication/screens/on_boarding_screen/on_boarding_screen.dart';
 import 'package:login/src/features/authentication/screens/splash_screen/splash_screen.dart';
 import 'package:login/src/features/authentication/screens/welcome_screen/welcome_screen.dart';
 
@@ -16,12 +16,17 @@ class AuthenticationRepository extends GetxController {
   final _auth = FirebaseAuth.instance;
   late final Rx<User?> firebaseUser;
   var verificationId = ''.obs;
+  final devicestorage = GetStorage();
 
   @override
   void onReady() {
     firebaseUser = Rx<User?>(_auth.currentUser);
     firebaseUser.bindStream(_auth.userChanges());
     ever(firebaseUser, _setIntialScreen);
+  }
+  screenRedirect()async{
+    devicestorage.writeIfNull("IsFirstTime", true);
+    devicestorage.read("IsFirstTime")!= true ? Get.offAll(()=>WelcomeScreen()) : Get.offAll(()=>OnBoardingScreen());
   }
 
   _setIntialScreen(User? user) {
@@ -72,7 +77,6 @@ class AuthenticationRepository extends GetxController {
       throw ex;
     } catch (_) {
       const ex = SignUpEmailPasswordFailure();
-      print('Exception- ${ex.message}');
       throw ex;
     }
   }
@@ -88,7 +92,6 @@ class AuthenticationRepository extends GetxController {
       throw ex;
     } catch (_) {
       const ex = SignUpEmailPasswordFailure();
-      print('Exception- ${ex.message}');
       throw ex;
     }
   }

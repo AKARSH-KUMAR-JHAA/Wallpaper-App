@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:login/src/common_widget/field_form_widget.dart';
-import 'package:login/src/features/authentication/models/Field_form_model.dart';
+import 'package:login/src/features/authentication/models/field_form_model.dart';
 
 import '../../../../repository/authentication_repository/authentication_repository.dart';
 

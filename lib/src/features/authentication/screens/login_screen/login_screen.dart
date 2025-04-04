@@ -17,7 +17,7 @@ class LoginScreen extends StatelessWidget {
           child: SizedBox(height: size.height,
             child: Stack(
               children: [
-                Positioned(width: size.width,height: size.height*0.43, top: 0, child: header_form_widget(txt: 'Login Here',img: loginAni2,txt2: '')),
+                Positioned(width: size.width,height: size.height*0.43, top: 0, child: HeaderFormWidget(txt: 'Login Here',img: loginAni2,txt2: '')),
                 Positioned(top: 320,width: size.width, child: Loginform(size: size)),
                 Positioned(width: size.width, bottom: -35, child: Lottie.asset(loginAni3,fit: BoxFit.fitWidth)),
                 Positioned(bottom: 90,width: size.width, child: FooterSignupWidget(size: size, txt1: "Don't have an Account? ", txt2: "Signup", screen: SignupScreen())),

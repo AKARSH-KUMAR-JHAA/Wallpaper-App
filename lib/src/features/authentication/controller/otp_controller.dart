@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:login/src/features/authentication/screens/bmi_screen/bmi_screen.dart';
 import 'package:login/src/features/authentication/screens/dashboard_screen/bottom_nav_bar/bottom_nav_bar.dart';
 
 import '../../../repository/authentication_repository/authentication_repository.dart';

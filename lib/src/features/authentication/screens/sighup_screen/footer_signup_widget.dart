@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:login/src/features/authentication/controller/login_controller.dart';
-import 'package:login/src/repository/authentication_repository/authentication_repository.dart';
 
 class FooterSignupWidget extends StatelessWidget {
   const FooterSignupWidget({super.key,
@@ -34,11 +33,7 @@ class FooterSignupWidget extends StatelessWidget {
               ),
             ),
             TextButton(onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => screen,
-                  ));
+              Get.offAll(()=>screen);
             },
               child: RichText(text: TextSpan(
                   style: Theme.of(context).textTheme.displaySmall,

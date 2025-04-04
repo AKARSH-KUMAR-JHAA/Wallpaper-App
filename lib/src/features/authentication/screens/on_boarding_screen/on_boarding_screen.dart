@@ -55,7 +55,7 @@ class OnBoardingScreen extends StatelessWidget {
                   onTap: () {
                     obcontroller.skip();
                   },
-                ))
+                )),
           ],
         ),
       ),

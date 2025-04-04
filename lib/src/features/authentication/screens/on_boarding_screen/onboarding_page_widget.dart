@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:login/src/constants/text_strings.dart';
 import 'package:login/src/features/authentication/screens/welcome_screen/welcome_screen.dart';
 import '../../models/onboarding_page_model.dart';
@@ -37,7 +39,9 @@ class OnboardingPageWidget extends StatelessWidget {
                     child: SizedBox(height: size.height*0.08,width: size.width,
                       child: ElevatedButton(
                           onPressed:() {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => WelcomeScreen(),));
+                            Get.offAll(()=>WelcomeScreen());
+                            final deviceStorage = GetStorage();
+                            deviceStorage.write("IsFirstTime", false);
                           },
                           child: Center(child: Text(onboardingstart.toUpperCase(),style: Theme.of(context).textTheme.bodyMedium,))),
                     ),

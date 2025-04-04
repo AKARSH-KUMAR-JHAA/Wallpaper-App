@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:login/src/features/authentication/models/user_model.dart';
-import 'package:login/src/features/authentication/screens/dashboard_screen/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:login/src/features/authentication/screens/forget_password_screen/forget_pass_otp/forget_pass_otp.dart';
 import 'package:login/src/repository/user_repository/user_repository.dart';
 

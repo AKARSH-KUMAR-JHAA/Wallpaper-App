@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:login/src/features/authentication/models/Field_form_model.dart';
+import 'package:login/src/features/authentication/models/field_form_model.dart';
 import 'package:login/src/features/authentication/controller/signup_controller.dart';
 import 'package:login/src/features/authentication/models/user_model.dart';
 import '../../../../common_widget/field_form_widget.dart';
-import '../forget_password_screen/forget_pass_otp/forget_pass_otp.dart';
 
-class form_field extends StatelessWidget {
-  const form_field({
+class SignupForm extends StatelessWidget {
+  const SignupForm({
     super.key,
   });
 
@@ -75,7 +74,7 @@ class form_field extends StatelessWidget {
                     }
                     else {
                       Get.snackbar("Empty", "please fill All the field",
-                          backgroundColor: Colors.red.withOpacity(0.1),
+                          backgroundColor: Colors.red.withValues(red: 0.1),
                           colorText: Colors.red,
                           snackPosition: SnackPosition.BOTTOM);
                     }

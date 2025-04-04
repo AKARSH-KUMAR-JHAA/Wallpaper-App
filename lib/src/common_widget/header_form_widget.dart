@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-class header_form_widget extends StatelessWidget {
-  const header_form_widget({super.key,
+class HeaderFormWidget extends StatelessWidget {
+  const HeaderFormWidget({super.key,
     required this.img,
     required this.txt,
     required this.txt2,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:login/src/common_widget/field_form_widget.dart';
 import 'package:login/src/common_widget/header_form_widget.dart';
-import 'package:login/src/features/authentication/models/Field_form_model.dart';
+import 'package:login/src/features/authentication/models/field_form_model.dart';
 import 'package:login/src/features/authentication/screens/forget_password_screen/forget_pass_otp/forget_pass_otp.dart';
 
 class ForgetPassEmail extends StatelessWidget {
@@ -19,7 +19,7 @@ class ForgetPassEmail extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            header_form_widget(
+            HeaderFormWidget(
               img: "assets/images/forget_pass_images/forget_pass_email.png",
               txt: "Forget Password",
               txt2: "Enter your email below to reset your password",

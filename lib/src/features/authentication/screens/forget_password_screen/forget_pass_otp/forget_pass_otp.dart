@@ -22,7 +22,7 @@ class ForgetPassOtp extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              header_form_widget(
+              HeaderFormWidget(
                 txt: "Enter Code",
                 txt2: "Enter 6-digit otp Here:",
                 img: "assets/images/forget_pass_images/forget_pass_email.png",

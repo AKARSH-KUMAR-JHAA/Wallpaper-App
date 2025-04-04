@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:login/src/features/authentication/screens/profile_screen/profile_screen.dart';
+import 'package:login/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
@@ -13,7 +14,7 @@ class HomeTab extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(4,8,4,0),
+        padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
         child: SizedBox(
           child: Stack(
             alignment: Alignment.center,
@@ -54,16 +55,32 @@ class HomeTab extends StatelessWidget {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return GridView.builder(
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: (size.width/2.5)/(size.height/2.5),crossAxisSpacing: 8,mainAxisSpacing: 8,),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio:
+                                (size.width / 2.5) / (size.height / 2.5),
+                            crossAxisSpacing: 8,
+                            mainAxisSpacing: 8,
+                          ),
                           itemCount: snapshot.data!.docs.length,
                           itemBuilder: (context, i) {
                             var lower = snapshot.data!.docs[i]['lower'];
-                            return ClipRRect(borderRadius: BorderRadius.circular(18), child: CachedNetworkImage(imageUrl: lower , fit: BoxFit.fill,));
+                            return ClipRRect(
+                                borderRadius: BorderRadius.circular(18),
+                                child: GestureDetector(
+                                    onTap: () {
+                                      Get.to(()=>WallpaperFullScreen(lower));
+                                    },
+                                    child: CachedNetworkImage(
+                                      imageUrl: lower,
+                                      fit: BoxFit.fill,
+                                    )));
                           },
                         );
                       } else if (snapshot.connectionState ==
                           ConnectionState.waiting) {
-                        return CircularProgressIndicator();
+                        return Center(child: CircularProgressIndicator());
                       } else {
                         return Center(
                           child: Text("Error"),

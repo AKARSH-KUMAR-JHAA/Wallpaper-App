@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:login/src/features/authentication/screens/welcome_screen/welcome_screen.dart';
-
 import '../../../../repository/authentication_repository/authentication_repository.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

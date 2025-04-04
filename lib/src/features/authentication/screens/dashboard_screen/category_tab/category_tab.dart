@@ -5,8 +5,14 @@ class CategoryTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(
-      body: Container(),
+    final size= MediaQuery.of(context).size;
+    return SafeArea(
+        child: Scaffold(
+      body: Stack(
+        children: [
+          Positioned(top: 200, child: SizedBox(width: size.width, child: SearchBar(onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(), leading: Icon(Icons.search ,size: 35,), hintText: "  Search",)))
+        ],
+      ),
     ));
   }
 }

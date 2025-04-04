@@ -20,7 +20,8 @@ class UserRepository extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.redAccent.shade200,
           colorText: Colors.redAccent);
-      print(error.toString());
+      return error;
+
     });
   }
 }

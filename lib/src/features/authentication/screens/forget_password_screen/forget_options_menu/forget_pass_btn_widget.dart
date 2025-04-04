@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class forget_pass_btn_widget extends StatelessWidget {
-  const forget_pass_btn_widget({
+class ForgetPassBtnWidget extends StatelessWidget {
+  const ForgetPassBtnWidget({
     super.key,
     required this.size,
     required this.iconbtn,

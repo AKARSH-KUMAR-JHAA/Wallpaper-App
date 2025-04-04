@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:login/src/common_widget/field_form_widget.dart';
 import 'package:login/src/common_widget/header_form_widget.dart';
-import 'package:login/src/features/authentication/models/Field_form_model.dart';
-
-import '../../../controller/signup_controller.dart';
+import 'package:login/src/features/authentication/models/field_form_model.dart';
 
 class ForgetPassPhone extends StatelessWidget {
   const ForgetPassPhone({super.key});
@@ -12,7 +9,6 @@ class ForgetPassPhone extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final controllers =Get.put(SignUpController());
     return SafeArea(
         child: Scaffold(
       body: Padding(
@@ -21,7 +17,7 @@ class ForgetPassPhone extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            header_form_widget(
+            HeaderFormWidget(
               img: "assets/images/forget_pass_images/forget_pass_email.png",
               txt: "Forget Password",
               txt2: "Enter your phone-No below to reset your password",
