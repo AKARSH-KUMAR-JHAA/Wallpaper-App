@@ -8,6 +8,9 @@ class FormFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      onTapOutside: (event) {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
       controller: model.field,
       decoration: InputDecoration(
           label: Text(model.label),

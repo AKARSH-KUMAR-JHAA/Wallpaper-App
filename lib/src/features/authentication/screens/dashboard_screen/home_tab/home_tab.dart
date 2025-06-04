@@ -1,11 +1,14 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:login/src/features/authentication/controller/sidebar_controller.dart';
 import 'package:login/src/features/authentication/screens/profile_screen/profile_screen.dart';
 import 'package:login/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart';
 
-class HomeTab extends StatelessWidget {
+class HomeTab extends GetView<MyDrawerController> {
   const HomeTab({super.key});
 
   @override
@@ -35,7 +38,7 @@ class HomeTab extends StatelessWidget {
                   top: 0,
                   left: 0,
                   child: GestureDetector(
-                      onTap: () {},
+                      onTap: controller.toggleDrawer,
                       child: Icon(
                         Icons.menu,
                         size: 40,
@@ -47,7 +50,7 @@ class HomeTab extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineSmall,
                   )),
               Container(
-                  margin: EdgeInsets.only(top: 50),
+                  margin: EdgeInsets.only(top: 55),
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection("wallpaper")
@@ -65,6 +68,10 @@ class HomeTab extends StatelessWidget {
                           ),
                           itemCount: snapshot.data!.docs.length,
                           itemBuilder: (context, i) {
+                            // int min = 0;
+                            // int max = snapshot.data!.docs.length-1;
+                            // var rnd = Random();
+                            // int i = min + rnd.nextInt(max - min);
                             var lower = snapshot.data!.docs[i]['lower'];
                             return ClipRRect(
                                 borderRadius: BorderRadius.circular(18),

@@ -1,14 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-
-import 'package:wallpaper_manager_plus/wallpaper_manager_plus.dart';
+import 'package:get/get.dart';
+import 'package:login/src/features/authentication/screens/dashboard_screen/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:login/src/features/authentication/screens/dashboard_screen/home_tab/home_tab.dart';
+import 'package:wallpaper_manager_flutter/wallpaper_manager_flutter.dart';
 
 class WallpaperFullScreen extends StatelessWidget {
  WallpaperFullScreen(this.link,{super.key});
   final String link;
 
-  final WallpaperManagerPlus wallpaperManagerPlus = WallpaperManagerPlus();
+  final WallpaperManagerFlutter wallpaperManagerFlutter = WallpaperManagerFlutter();
 
   Future<void> _loadImage() async {
     await Future.delayed(Duration(seconds: 0)); // Simulate network delay
@@ -17,12 +19,11 @@ class WallpaperFullScreen extends StatelessWidget {
   Future<void> _setwallpaper(location) async {
     final file = await DefaultCacheManager().getSingleFile(link);
     try {
-      final result = await wallpaperManagerPlus.setWallpaper(file, location);
-      ScaffoldMessenger.of(BuildContext as BuildContext).showSnackBar(
-        SnackBar(
-          content: Text(result ?? ''),
-        ),
-      );
+       await wallpaperManagerFlutter.setWallpaper(file, location);
+       Get.to(()=>BottomNavBar());
+
+
+
     } catch (e) {
       ScaffoldMessenger.of(BuildContext as BuildContext).showSnackBar(
         const SnackBar(
@@ -44,7 +45,7 @@ class WallpaperFullScreen extends StatelessWidget {
               future: _loadImage(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return CircularProgressIndicator(color: Colors.white,);
                 } else if (snapshot.connectionState == ConnectionState.done) {
                   return Stack(
                     children: [
@@ -56,12 +57,12 @@ class WallpaperFullScreen extends StatelessWidget {
                           child: SizedBox(height: 65, width: size.width*0.9,
                             child: ElevatedButton(style: ButtonStyle(backgroundColor: WidgetStateColor.transparent,),
                               onPressed: () {
-                                _setwallpaper(WallpaperManagerPlus.homeScreen);
+                                _setwallpaper(WallpaperManagerFlutter.bothScreens);
                               },
                               child: Text('Set Wallpaper', style: Theme
                                   .of(context)
                                   .textTheme
-                                  .bodyMedium,),
+                                  .displayMedium,),
                             ),
                           ),
                         ),

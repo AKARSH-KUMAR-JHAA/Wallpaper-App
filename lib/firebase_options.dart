@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -63,7 +54,40 @@ class DefaultFirebaseOptions {
     messagingSenderId: '953178718235',
     projectId: 'flutter-login-307ae',
     storageBucket: 'flutter-login-307ae.firebasestorage.app',
+    androidClientId: '953178718235-rdf6eg3po3g6t4ljajmcpnc416dndhbn.apps.googleusercontent.com',
+    iosClientId: '953178718235-1ejcuscvmqtumm4ii6ohghvjg1uqrptb.apps.googleusercontent.com',
     iosBundleId: 'com.example.login',
+  );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyCq8srtFffsPiZ2UXnyDJNBftqQd_cHPtI',
+    appId: '1:953178718235:web:b8d90a5a090a99baa3f8be',
+    messagingSenderId: '953178718235',
+    projectId: 'flutter-login-307ae',
+    authDomain: 'flutter-login-307ae.firebaseapp.com',
+    storageBucket: 'flutter-login-307ae.firebasestorage.app',
+    measurementId: 'G-7GSQL8DN9V',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyBi8tKJGR4w2plhm0XZMJ1KYDxSPigy_1A',
+    appId: '1:953178718235:ios:c2da80d3a75eac93a3f8be',
+    messagingSenderId: '953178718235',
+    projectId: 'flutter-login-307ae',
+    storageBucket: 'flutter-login-307ae.firebasestorage.app',
+    androidClientId: '953178718235-rdf6eg3po3g6t4ljajmcpnc416dndhbn.apps.googleusercontent.com',
+    iosClientId: '953178718235-1ejcuscvmqtumm4ii6ohghvjg1uqrptb.apps.googleusercontent.com',
+    iosBundleId: 'com.example.login',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyCq8srtFffsPiZ2UXnyDJNBftqQd_cHPtI',
+    appId: '1:953178718235:web:c2e014987a341806a3f8be',
+    messagingSenderId: '953178718235',
+    projectId: 'flutter-login-307ae',
+    authDomain: 'flutter-login-307ae.firebaseapp.com',
+    storageBucket: 'flutter-login-307ae.firebasestorage.app',
+    measurementId: 'G-ZYYN2JS1NL',
   );
 
 }

@@ -13,61 +13,82 @@ class WelcomeScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        body: Stack(
-          children: [
-            Positioned(top: 0, child: Lottie.asset(welcomeAni1,height: size.height*0.3,fit: BoxFit.fitHeight),),
-            Positioned(bottom: 370,width: size.width, child: SizedBox(height: size.height*0.27, child: Lottie.asset(welcomeAni3,fit: BoxFit.cover,)),),
-            Positioned(bottom: 0, child: SizedBox(height: size.height*0.27, child: Lottie.asset(welcomeAni2,fit: BoxFit.cover)),),
-            Positioned(top: 150,width: size.width,
-              child: Center(
-                child: Text(
+          body: SizedBox(height: size.height*1,
+            child: Stack(
+                    children: [
+            Positioned(
+              top: 0,
+              child: Lottie.asset(welcomeAni1,
+                  height: size.height * 0.27, fit: BoxFit.fitHeight),
+            ),
+            Positioned(
+              bottom: 510, width: 400,
+              child: SizedBox(
+                  height: size.height * 0.1,
+                  child: Lottie.asset(
+                    welcomeAni3,
+                    fit: BoxFit.cover,
+                  )),
+            ),
+            Positioned(
+              bottom: 0,
+              child: SizedBox(
+                  height: size.height * 0.27,
+                  child: Lottie.asset(welcomeAni2, fit: BoxFit.cover)),
+            ),
+            Column(mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 50,),
+                Center(
+                  child: Text(
                     welcomeheadline,
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
-              ),
-            ),
-            Positioned(bottom: 130,width: size.width, child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-
-                SizedBox(
-                  width: size.width * 0.45,height: 65,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginScreen(),
-                            ));
-                      },
-                      child: Text(
-                        login.toUpperCase(),
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      )),
                 ),
-                SizedBox(
-                  width: size.width * 0.45,height: 65,
-                  child: OutlinedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SignupScreen(),
-                            ));
-                      },
-                      child: Text(
-                        signup.toUpperCase(),
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      )),
-                )
+                SizedBox(height: 440,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    SizedBox(
+                      width: size.width * 0.45,
+                      height: 65,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginScreen(),
+                                ));
+                          },
+                          child: Text(
+                            login.toUpperCase(),
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          )),
+                    ),
+                    SizedBox(
+                      width: size.width * 0.45,
+                      height: 65,
+                      child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SignupScreen(),
+                                ));
+                          },
+                          child: Text(
+                            signup.toUpperCase(),
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          )),
+                    )
+                  ],
+                ),
               ],
             ),
-            ),
-
-          ],
-        )
-      ),
+                    ],
+                  ),
+          )),
     );
   }
 }

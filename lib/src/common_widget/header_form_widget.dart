@@ -14,12 +14,13 @@ class HeaderFormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Lottie.asset(img,fit: BoxFit.fill),
+        Lottie.asset(img,fit: BoxFit.fitWidth),
         Text(txt,style: Theme.of(context).textTheme.headlineLarge,),
-        Text(txt2,style: Theme.of(context).textTheme.bodyLarge,textAlign: TextAlign.center,)
+
 
 
       ],

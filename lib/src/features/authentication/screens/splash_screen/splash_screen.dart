@@ -17,8 +17,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(milliseconds: 5350),(){
-      AuthenticationRepository.instance.screenRedirect();
+   Timer(Duration(seconds: 5),()  {
+      AuthenticationRepository.instance.hasrunfun();
     });
   }
 

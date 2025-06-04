@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:get/get.dart';
 import 'package:login/src/common_widget/header_form_widget.dart';
 import 'package:login/src/features/authentication/controller/otp_controller.dart';
 
@@ -9,6 +10,7 @@ class ForgetPassOtp extends StatelessWidget {
   @override
 
   Widget build(BuildContext context) {
+    Get.put(OtpController());
   late String otp;
     final size = MediaQuery.of(context).size;
     return SafeArea(

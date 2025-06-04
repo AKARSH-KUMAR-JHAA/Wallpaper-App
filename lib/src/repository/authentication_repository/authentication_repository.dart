@@ -5,8 +5,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:login/src/exception/exception.dart';
 import 'package:login/src/exception/signup_email_password_failure.dart';
 import 'package:login/src/features/authentication/screens/dashboard_screen/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:login/src/features/authentication/screens/dashboard_screen/side_nav_bar/side_nav_bar.dart';
 import 'package:login/src/features/authentication/screens/on_boarding_screen/on_boarding_screen.dart';
-import 'package:login/src/features/authentication/screens/splash_screen/splash_screen.dart';
 import 'package:login/src/features/authentication/screens/welcome_screen/welcome_screen.dart';
 
 class AuthenticationRepository extends GetxController {
@@ -19,20 +19,31 @@ class AuthenticationRepository extends GetxController {
   final devicestorage = GetStorage();
 
   @override
-  void onReady() {
+  void onReady() async {
     firebaseUser = Rx<User?>(_auth.currentUser);
     firebaseUser.bindStream(_auth.userChanges());
     ever(firebaseUser, _setIntialScreen);
   }
-  screenRedirect()async{
-    devicestorage.writeIfNull("IsFirstTime", true);
-    devicestorage.read("IsFirstTime")!= true ? Get.offAll(()=>WelcomeScreen()) : Get.offAll(()=>OnBoardingScreen());
+
+  hasrunfun() async {
+    devicestorage.writeIfNull("hasrun", false);
+    if (devicestorage.read("hasrun") == false) {
+      screenRedirect();
+      devicestorage.write("hasrun", true);
+    } else {
+      onReady();
+    }
   }
 
-  _setIntialScreen(User? user) {
-    user == null
-        ? Get.offAll(() => const SplashScreen())
-        : Get.offAll(() => const BottomNavBar());
+  screenRedirect() async {
+    devicestorage.writeIfNull("IsFirstTime", true);
+    devicestorage.read("IsFirstTime") != true
+        ? Get.offAll(() => WelcomeScreen())
+        : Get.offAll(() => OnBoardingScreen());
+  }
+
+  _setIntialScreen(User? user) async {
+    user == null ? screenRedirect() : Get.offAll(() => SideNavBar());
   }
 
   Future<void> phoneAuthentication(String phoneNo) async {
@@ -121,9 +132,9 @@ class AuthenticationRepository extends GetxController {
       throw ex.message;
     }
   }
-  Future<void>logout() async {
-   await _auth.signOut();
-   Get.offAll(WelcomeScreen());
-  }
 
+  Future<void> logout() async {
+    await _auth.signOut();
+    Get.offAll(WelcomeScreen());
+  }
 }
