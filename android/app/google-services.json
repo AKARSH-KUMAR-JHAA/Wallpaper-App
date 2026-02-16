@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "953178718235",
+    "project_id": "flutter-login-307ae",
+    "storage_bucket": "flutter-login-307ae.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:953178718235:android:43ec0e0134f0254ca3f8be",
+        "android_client_info": {
+          "package_name": "com.wall.lumina"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "953178718235-c650tm6k6kqqn6eohpprr60d1pa8qps6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wall.lumina",
+            "certificate_hash": "c3a027c275cd49a81a6d91ee37d4002145a2e108"
+          }
+        },
+        {
+          "client_id": "953178718235-oqiq0sqcvtr8tqptp7p05qcs0b39vku4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wall.lumina",
+            "certificate_hash": "9e371b1edde9b99d2f575d1869c1d86aa751a346"
+          }
+        },
+        {
+          "client_id": "953178718235-5hiqd0cn0s4vf4eaf37jis70dc2qkv37.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhky4eaIOXOdXO9hXct7JOGMS71kkNrcw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "953178718235-5hiqd0cn0s4vf4eaf37jis70dc2qkv37.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "953178718235-1ejcuscvmqtumm4ii6ohghvjg1uqrptb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.login"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

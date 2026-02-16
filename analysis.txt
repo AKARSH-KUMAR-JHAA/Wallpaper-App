@@ -1,0 +1,99 @@
+Analyzing login...                                              
+
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/common_widget/field_form_widget.dart:23:43 • deprecated_member_use
+   info • Don't invoke 'print' in production code • lib/src/features/authentication/controller/favorites_controller.dart:93:7 • avoid_print
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/controller/forget_password_controller.dart:18:39 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/controller/forget_password_controller.dart:30:39 • deprecated_member_use
+warning • Unused import: '../../../repository/user_repository/user_repository.dart' • lib/src/features/authentication/controller/profile_controller.dart:5:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/controller/signup_controller.dart:55:39 • deprecated_member_use
+warning • Unused import: 'dart:convert' • lib/src/features/authentication/models/pexels_model.dart:1:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/about_us_tab/about_us_tab.dart:31:55 • deprecated_member_use
+warning • Unused import: 'package:get/get.dart' • lib/src/features/authentication/screens/dashboard_screen/bottom_nav_bar/bottom_nav_bar.dart:3:8 • unused_import
+warning • Unused import: '../../../controller/sidebar_controller.dart' • lib/src/features/authentication/screens/dashboard_screen/bottom_nav_bar/bottom_nav_bar.dart:9:8 • unused_import
+warning • Unused import: 'package:login/src/features/authentication/controller/sidebar_controller.dart' • lib/src/features/authentication/screens/dashboard_screen/category_tab/category_tab.dart:4:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/category_tab/category_tab.dart:112:49 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/category_tab/category_tab.dart:167:67 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/category_tab/category_tab.dart:268:59 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/category_tab/category_tab.dart:367:64 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/category_tab/category_tab.dart:367:97 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/category_tab/category_tab.dart:403:97 • deprecated_member_use
+warning • Unused import: 'package:login/src/features/authentication/controller/sidebar_controller.dart' • lib/src/features/authentication/screens/dashboard_screen/favorites_tab/favorites_tab.dart:5:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/favorites_tab/favorites_tab.dart:78:61 • deprecated_member_use
+warning • Unused import: 'package:login/src/features/authentication/screens/profile_screen/profile_screen.dart' • lib/src/features/authentication/screens/dashboard_screen/home_tab/home_tab.dart:7:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/home_tab/home_tab.dart:103:61 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/live_wallpapers_tab/live_wallpapers_tab.dart:123:63 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/live_wallpapers_tab/live_wallpapers_tab.dart:138:69 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/live_wallpapers_tab/live_wallpapers_tab.dart:176:66 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/settings_tab/settings_tab.dart:88:49 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/side_nav_bar/menu_screen.dart:51:28 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/side_nav_bar/menu_screen.dart:102:65 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/side_nav_bar/menu_screen.dart:160:42 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/side_nav_bar/side_nav_bar.dart:34:48 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/trending tab/trending_tab.dart:101:61 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/trending tab/trending_tab.dart:116:67 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/dashboard_screen/trending tab/trending_tab.dart:138:64 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/forget_password_screen/forget_pass_email/forget_pass_email.dart:38:53 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/forget_password_screen/forget_pass_email/forget_pass_email.dart:66:65 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/forget_password_screen/forget_pass_otp/forget_pass_otp.dart:40:50 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/forget_password_screen/forget_pass_otp/forget_pass_otp.dart:40:82 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/forget_password_screen/forget_pass_otp/forget_pass_otp.dart:70:55 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/forget_password_screen/forget_pass_otp/forget_pass_otp.dart:77:65 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/forget_password_screen/forget_pass_phone/forget_pass_phone.dart:38:53 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/forget_password_screen/forget_pass_phone/forget_pass_phone.dart:67:65 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/login_screen/login_form.dart:77:67 • deprecated_member_use
+warning • Unused import: '../../controller/sidebar_controller.dart' • lib/src/features/authentication/screens/profile_screen/profile_screen.dart:6:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/profile_screen/profile_screen.dart:43:88 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/profile_screen/profile_screen.dart:46:55 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/profile_screen/profile_screen.dart:138:55 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/profile_screen/profile_screen.dart:180:33 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/profile_screen/profile_screen.dart:191:51 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/sighup_screen/footer_signup_widget.dart:28:58 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/sighup_screen/footer_signup_widget.dart:40:58 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/sighup_screen/footer_signup_widget.dart:51:53 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/sighup_screen/footer_signup_widget.dart:52:56 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/sighup_screen/signup_form.dart:98:65 • deprecated_member_use
+warning • The declaration '<unnamed>' isn't referenced • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:18:7 • unused_element
+  error • Missing concrete implementation of 'abstract class StatelessWidget extends Widget.build' • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:18:7 • non_abstract_class_inherits_abstract_member
+warning • The declaration '_downloadImage' isn't referenced • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:23:16 • unused_element
+warning • The declaration '_setwallpaper' isn't referenced • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:52:16 • unused_element
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:65:32 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:66:32 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:69:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:74:39 • deprecated_member_use
+  error • A try block must be followed by an 'on', 'catch', or 'finally' clause • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:113:5 • missing_catch_or_finally
+warning • Unnecessary type check; the result is always 'true' • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:161:25 • unnecessary_type_check
+   info • The type of the right operand ('String') isn't a subtype or a supertype of the left operand ('bool') • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:161:90 • unrelated_type_equality_checks
+warning • Unnecessary type check; the result is always 'true' • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:170:22 • unnecessary_type_check
+   info • The type of the right operand ('String') isn't a subtype or a supertype of the left operand ('bool') • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:170:87 • unrelated_type_equality_checks
+   info • Don't use 'BuildContext's across async gaps • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:176:23 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:178:30 • use_build_context_synchronously
+  error • Expected a class member • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:191:7 • expected_class_member
+  error • Expected an identifier • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:191:13 • missing_identifier
+  error • The getter 'mounted' isn't defined for the type 'Context' • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:192:21 • undefined_getter
+  error • Undefined name 'context' • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:193:30 • undefined_identifier
+  error • Undefined name 'context' • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:193:54 • undefined_identifier
+  error • Undefined name 'context' • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:194:30 • undefined_identifier
+  error • Can't have modifier 'static' here • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:205:3 • extraneous_modifier
+  error • Undefined name 'link' • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:247:18 • undefined_identifier
+  error • Undefined name 'photo' • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:252:27 • undefined_identifier
+  error • Undefined name 'link' • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:252:50 • undefined_identifier
+  error • Undefined name 'link' • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:255:29 • undefined_identifier
+  error • Undefined name 'photo' • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:281:21 • undefined_identifier
+  error • Undefined name 'photo' • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:283:65 • undefined_identifier
+  error • Undefined name 'photo' • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:294:62 • undefined_identifier
+  error • The function '_downloadImage' isn't defined • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:348:44 • undefined_function
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:374:35 • deprecated_member_use
+  error • The function '_setwallpaper' isn't defined • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:418:23 • undefined_function
+  error • The function '_setwallpaper' isn't defined • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:430:23 • undefined_function
+  error • The function '_setwallpaper' isn't defined • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:442:23 • undefined_function
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:474:44 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:474:76 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:477:42 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:477:75 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:484:39 • deprecated_member_use
+  error • Expected a method, getter, setter or operator declaration • lib/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart:507:1 • expected_executable
+   info • Type could be non-nullable • lib/src/repository/authentication_repository/authentication_repository.dart:160:41 • unnecessary_nullable_for_final_variable_declarations
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/repository/authentication_repository/authentication_repository.dart:194:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/src/repository/authentication_repository/authentication_repository.dart:197:39 • deprecated_member_use
+
+95 issues found. (ran in 2.5s)
