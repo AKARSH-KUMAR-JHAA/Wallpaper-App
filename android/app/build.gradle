@@ -7,28 +7,43 @@ plugins {
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 dependencies{
     implementation platform('com.google.firebase:firebase-bom:33.14.0')
     implementation platform('com.google.firebase:firebase-analytics:22.4.0')
 }
 
+configurations.all {
+    resolutionStrategy {
+        force 'androidx.browser:browser:1.8.0'
+        force 'androidx.core:core:1.13.1'
+        force 'androidx.core:core-ktx:1.13.1'
+    }
+}
+
 android {
-    namespace = "com.example.login"
+    namespace = "com.wall.lumina"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        jvmTarget = "17"
     }
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.login"
+        applicationId = "com.wall.lumina"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 24
@@ -37,11 +52,20 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        release {
+            keyAlias = keystoreProperties['keyAlias']
+            keyPassword = keystoreProperties['keyPassword']
+            storeFile = keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword = keystoreProperties['storePassword']
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            signingConfig = signingConfigs.release
         }
     }
 }

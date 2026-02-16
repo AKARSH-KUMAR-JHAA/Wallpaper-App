@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:login/src/features/authentication/controller/login_controller.dart';
+import 'package:luminawall/src/features/authentication/controller/login_controller.dart';
+import 'package:luminawall/src/constants/colors_strings.dart';
 
 class FooterSignupWidget extends StatelessWidget {
-  const FooterSignupWidget({super.key,
+  const FooterSignupWidget({
+    super.key,
     required this.size,
     required this.txt1,
     required this.txt2,
-    required this.screen
-
+    required this.screen,
   });
   final Size size;
   final String txt1;
@@ -19,33 +20,73 @@ class FooterSignupWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(LoginController());
     return Padding(
-      padding: const EdgeInsets.fromLTRB(15,0,15,0),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Text('OR',style: Theme.of(context).textTheme.bodyLarge,),
-            SizedBox(height: 65,width: size.width,
-              child: OutlinedButton.icon(onPressed: () {
-                controller.googleSignIn();
-        
-              }, icon: Image(image: AssetImage('assets/images/sign_up_images/R.png'),height: 23,),
-                label: Text('SIGN IN WITH GOOGLE',style: Theme.of(context).textTheme.bodyLarge),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                  child: Divider(color: kJungleCream.withValues(alpha: 0.2))),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text(
+                  'OR',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: kJungleCream.withValues(alpha: 0.5),
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2,
+                      ),
+                ),
+              ),
+              Expanded(
+                  child: Divider(color: kJungleCream.withValues(alpha: 0.2))),
+            ],
+          ),
+          const SizedBox(height: 15),
+          SizedBox(
+            height: 55,
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: () => controller.googleSignIn(),
+              style: OutlinedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                side: BorderSide(color: kJungleCream.withValues(alpha: 0.3)),
+                backgroundColor: Colors.white.withValues(alpha: 0.05),
+              ),
+              icon: const Image(
+                image: AssetImage('assets/images/sign_up_images/R.png'),
+                height: 24,
+              ),
+              label: Text(
+                'Sign in with Google',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: kJungleCream,
+                    ),
               ),
             ),
-            TextButton(onPressed: () {
-              Get.offAll(()=>screen);
-            },
-              child: RichText(text: TextSpan(
-                  style: Theme.of(context).textTheme.displaySmall,
-                  children: [
-                    TextSpan(text: txt1),
-                    TextSpan(text: txt2.toUpperCase(),style: TextStyle(color: Colors.blue))
-        
-                  ]
-              )),
-            )
-          ],
-        ),
+          ),
+          const SizedBox(height: 15),
+          TextButton(
+            onPressed: () => Get.offAll(() => screen),
+            child: RichText(
+                text: TextSpan(
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: kJungleCream.withValues(alpha: 0.7),
+                        ),
+                    children: [
+                  TextSpan(text: '$txt1 '),
+                  TextSpan(
+                    text: txt2.toUpperCase(),
+                    style: const TextStyle(
+                      color: kJungleEmerald,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                ])),
+          )
+        ],
       ),
     );
   }

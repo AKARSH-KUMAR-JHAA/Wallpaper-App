@@ -18,51 +18,75 @@ class Loginform extends StatelessWidget {
     final controller = Get.put(LoginController());
     final loginkeu = GlobalObjectKey<FormState>(LoginController);
     return Padding(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: Form(
         key: loginkeu,
         child: Column(
           children: [
+            const SizedBox(height: 20),
             FormFieldWidget(
                 model: Fieldformmodel(
-                  field: controller.email,
-                    label: 'Email',
-                    preicon: Icons.email_outlined,
-                    )),
-            SizedBox(
-              height: 10,
-            ),
+              field: controller.email,
+              label: 'Email',
+              preicon: Icons.email_rounded,
+              validator: (value) {
+                if (value == null || value.isEmpty) return "Email is required";
+                if (!GetUtils.isEmail(value)) return "Enter a valid email";
+                return null;
+              },
+            )),
+            const SizedBox(height: 15),
             FormFieldWidget(
                 model: Fieldformmodel(
-                  field: controller.password,
+                    field: controller.password,
                     label: 'Password',
-                    preicon: Icons.password_rounded,
-                    suficon: Icons.remove_red_eye)),
+                    preicon: Icons.lock_rounded,
+                    suficon: Icons.remove_red_eye,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return "Password is required";
+                      return null;
+                    })),
             Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
                     onPressed: () {
                       ForgetpasswordScreen.buildShowModalBottomSheet(context);
                     },
-                    child: Text("Forget Password?",
-                        style: TextStyle(color: Colors.blue, fontSize: 20)))),
+                    child: Text(
+                      "Forget Password?",
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ))),
+            const SizedBox(height: 20),
             SizedBox(
-                height: 60,
-                width: size.width,
+                height: 55,
+                width: double.infinity,
                 child: ElevatedButton(
                     onPressed: () {
-                      if(loginkeu.currentState!.validate()){
-                        LoginController.instance.login(controller.email.text.trim(), controller.password.text.trim());
+                      if (loginkeu.currentState!.validate()) {
+                        LoginController.instance.login(controller.email.text.trim(),
+                            controller.password.text.trim());
                       }
                     },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      elevation: 5,
+                      shadowColor: Theme.of(context).primaryColor.withOpacity(0.3),
+                    ),
                     child: Text(
                       'LOGIN',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                     )))
           ],
         ),
       ),
     );
   }
-
 }

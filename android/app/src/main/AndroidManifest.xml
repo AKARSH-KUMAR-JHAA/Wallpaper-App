@@ -1,13 +1,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.SET_WALLPAPER"/>
+    
+    <!-- Legacy permissions for Android 12 and below -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    
+    <!-- Granular permissions for Android 13+ -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
 
     <application
-        android:label="login"
+        android:label="LuminaWall"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:enableOnBackInvokedCallback="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -35,6 +42,19 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <service
+            android:name="com.lazy_cat.async_wallpaper.AsyncWallpaperService"
+            android:exported="true"
+            android:label="Async Wallpaper"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper" />
+        </service>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
@@ -45,6 +65,17 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- Added queries for Google Play Services visibility -->
+        <package android:name="com.google.android.gms" />
+        <intent>
+            <action android:name="com.google.android.gms.auth.service.START" />
+        </intent>
+        <!-- Added for url_launcher to open links on Android 11+ -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
         </intent>
     </queries>
 </manifest>

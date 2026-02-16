@@ -8,7 +8,7 @@ class Textformfieldtheme {
       fillColor: Colors.white,
       filled: true,
       enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(7),
-          borderSide: BorderSide(color: Colors.black,width: 1,)),
+          borderSide: BorderSide(color: Colors.black,width: 10,)),
       focusedBorder: OutlineInputBorder( borderSide: BorderSide(color: Colors.blue,width: 2)),
 
       );

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:login/src/constants/animation_strings.dart';
-import 'package:login/src/constants/text_strings.dart';
-import 'package:login/src/features/authentication/screens/login_screen/login_screen.dart';
-import 'package:login/src/features/authentication/screens/sighup_screen/footer_signup_widget.dart';
+import 'package:luminawall/src/constants/colors_strings.dart';
+import 'package:luminawall/src/constants/animation_strings.dart';
+import 'package:luminawall/src/features/authentication/screens/login_screen/login_screen.dart';
+import 'package:luminawall/src/features/authentication/screens/sighup_screen/footer_signup_widget.dart';
+import 'package:luminawall/src/features/authentication/screens/sighup_screen/signup_header_widget.dart';
+import 'package:luminawall/src/constants/text_strings.dart';
 import 'package:lottie/lottie.dart';
+import 'package:get/get.dart';
+import 'package:luminawall/src/common_widget/jungle_loading_overlay.dart';
+import 'package:luminawall/src/features/authentication/controller/signup_controller.dart';
 import 'signup_form.dart';
-import '../../../../common_widget/header_form_widget.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key});
@@ -13,28 +17,85 @@ class SignupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: SizedBox(height: size.height,
-            child: Stack(
-              children: [
-                Positioned(width: size.width, bottom: -35, child: Lottie.asset(loginAni3,fit: BoxFit.fitWidth)),
-                Column(children: [
-                  HeaderFormWidget(img:signupAni1 ,txt: onboardingheadline1,txt2: ''),
-                  SignupForm(),
-                  FooterSignupWidget(size:size,txt1: 'already have an account? ',txt2: 'login',screen: LoginScreen(),)
+    final bottomAnimHeight = size.height * 0.05;
 
-                ],),
-
-              ],
+    return Scaffold(
+      backgroundColor: kJungleMossDark,
+      // 1. Prevent the background elements from being pushed up by the keyboard
+      resizeToAvoidBottomInset: false,
+      body: SizedBox(height: double.infinity, width: double.infinity,
+        child: Stack(
+          children: [
+            // Background Depth
+            Positioned.fill(
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      kJungleDeepGreen,
+                      kJungleMossDark,
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
+
+            // Bottom Background Animation - Pinned strictly to the bottom
+            Positioned(
+              bottom: -80, // Pinned to the absolute bottom
+              left: 0,
+              right: 0,
+              child: Lottie.asset(
+                loginAni3,
+                fit: BoxFit.fitWidth,
+
+              ),
+            ),
+
+            // Main Content
+            GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Padding(
+                  // 2. Account for keyboard manually so form stays scrollable
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom + 50),
+                  child: Column(
+                    children: [
+                      const SignupHeaderWidget(
+                        img: loginAni2,
+                        title: signupTitle,
+                        subtitle: signupSubtitle,
+                      ),
+                      const SignupForm(),
+                      FooterSignupWidget(
+                        size: size,
+                        txt1: alreadyHaveAccount,
+                        txt2: login,
+                        screen: const LoginScreen(),
+                      ),
+                      // Large spacer at the bottom
+                      SizedBox(height: bottomAnimHeight * 0.2),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            // Full Screen Loading Overlay
+            Obx(() {
+              final controller = Get.put(SignUpController());
+              if (controller.isLoading.value) {
+                return const JungleLoadingOverlay(message: "Creating Account...");
+              }
+              return const SizedBox.shrink();
+            }),
+          ],
         ),
       ),
     );
   }
 }
-
-
-
