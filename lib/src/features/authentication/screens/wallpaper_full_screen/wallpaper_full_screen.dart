@@ -6,10 +6,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:gal/gal.dart';
 import 'package:lottie/lottie.dart';
 import 'package:luminawall/src/features/authentication/controller/favorites_controller.dart';
+import 'package:luminawall/src/features/authentication/controller/settings_controller.dart';
 import 'package:luminawall/src/features/authentication/models/wallpaper_model.dart';
 import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as p;
@@ -69,29 +71,26 @@ class _WallpaperFullScreenState extends State<WallpaperFullScreen> {
 
   Future<void> _downloadImage(BuildContext context) async {
     try {
-      final downloadUrl = widget.photo?.src.original ?? widget.link;
+      final settingsController = Get.find<SettingsController>();
+      final photo = widget.photo;
+      final downloadUrl = photo != null
+          ? settingsController.getDownloadUrl(
+              original: photo.src.original,
+              large2x: photo.src.large2x,
+              large: photo.src.large,
+              medium: photo.src.medium,
+            )
+          : widget.link;
+
       final file = await DefaultCacheManager().getSingleFile(downloadUrl);
       await Gal.putImage(file.path);
 
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                const Icon(Icons.check_circle_outline, color: Colors.white),
-                const SizedBox(width: 12),
-                const Text(
-                  wallpaperSaved,
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
-            backgroundColor: kJungleForestGreen, // Jungle Forest Green
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            margin: const EdgeInsets.all(20),
-            elevation: 10,
-          ),
+        Fluttertoast.showToast(
+          msg: wallpaperSaved,
+          backgroundColor: kJungleForestGreen,
+          textColor: Colors.white,
+          toastLength: Toast.LENGTH_LONG,
         );
       }
     } catch (e) {
@@ -100,14 +99,11 @@ class _WallpaperFullScreenState extends State<WallpaperFullScreen> {
         if (e is GalException) {
           errorMessage = e.type.name;
         }
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(errorMessage),
-            backgroundColor: Colors.red.shade900,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            margin: const EdgeInsets.all(20),
-          ),
+        Fluttertoast.showToast(
+          msg: "Error: $errorMessage",
+          backgroundColor: Colors.red.shade900,
+          textColor: Colors.white,
+          toastLength: Toast.LENGTH_LONG,
         );
       }
       debugPrint(e.toString());
@@ -179,7 +175,16 @@ class _WallpaperFullScreenState extends State<WallpaperFullScreen> {
     );
 
     try {
-      final downloadUrl = widget.photo?.src.original ?? widget.link;
+      final settingsController = Get.find<SettingsController>();
+      final photo = widget.photo;
+      final downloadUrl = photo != null
+          ? settingsController.getDownloadUrl(
+              original: photo.src.original,
+              large2x: photo.src.large2x,
+              large: photo.src.large,
+              medium: photo.src.medium,
+            )
+          : widget.link;
       final file = await DefaultCacheManager().getSingleFile(downloadUrl);
       
       progressState.value = wallpaperProcessing;
@@ -220,13 +225,13 @@ class _WallpaperFullScreenState extends State<WallpaperFullScreen> {
         wallLocation = AsyncWallpaper.BOTH_SCREENS;
       }
 
-      bool result = await AsyncWallpaper.setWallpaperFromFile(
+      dynamic result = await AsyncWallpaper.setWallpaperFromFile(
         filePath: croppedFilePath,
         wallpaperLocation: wallLocation,
         goToHome: false,
       );
 
-      bool isSuccess = (result == true) || (result is String && result == "Wallpaper set");
+      bool isSuccess = (result == true) || (result.toString() == "Wallpaper set");
       
       if (!isSuccess) {
         debugPrint("SetWallpaperFromFile failed, trying setWallpaper with file protocol...");
@@ -235,7 +240,7 @@ class _WallpaperFullScreenState extends State<WallpaperFullScreen> {
           wallpaperLocation: wallLocation,
           goToHome: false,
         );
-        isSuccess = (result == true) || (result is String && result == "Wallpaper set");
+        isSuccess = (result == true) || (result.toString() == "Wallpaper set");
       }
 
         progressState.value = wallpaperAlmostDone;
@@ -244,25 +249,11 @@ class _WallpaperFullScreenState extends State<WallpaperFullScreen> {
         if (!context.mounted) return;
         Navigator.pop(context); // Close loading
         
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                const Icon(Icons.auto_awesome, color: Colors.white),
-                const SizedBox(width: 12),
-                const Text(
-                  wallpaperAppliedSuccess,
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                ),
-              ],
-            ),
-            backgroundColor: kJungleGreen, // Deep Jungle Green
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            margin: const EdgeInsets.all(20),
-            elevation: 8,
-            duration: const Duration(seconds: 3),
-          ),
+        Fluttertoast.showToast(
+          msg: wallpaperAppliedSuccess,
+          backgroundColor: kJungleGreen,
+          textColor: Colors.white,
+          toastLength: Toast.LENGTH_LONG,
         );
 
         // This forces the app to reset its state and refresh the home screen view
@@ -270,12 +261,15 @@ class _WallpaperFullScreenState extends State<WallpaperFullScreen> {
     } catch (e) {
       if (context.mounted) {
         if (Navigator.canPop(context)) Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: $e'),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-          ),
+        // Close any open dialogs/bottomsheets first
+        if (Get.isBottomSheetOpen == true || Get.isDialogOpen == true) {
+          if (Get.context != null) Navigator.pop(Get.context!);
+        }
+        Fluttertoast.showToast(
+          msg: "Error Setting Wallpaper: $e",
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          toastLength: Toast.LENGTH_LONG,
         );
       }
     }
@@ -305,9 +299,9 @@ class _WallpaperFullScreenState extends State<WallpaperFullScreen> {
 
     img.Image cropped = img.copyCrop(image, x: cropX, y: cropY, width: cropW, height: cropH);
     
-    // RESIZE FIX: Downscale if image is excessively large to avoid memory buffer overflow
-    if (cropped.height > 2400) {
-      cropped = img.copyResize(cropped, height: 2400, interpolation: img.Interpolation.linear);
+    // 4K UPSCALING: Increase limit to 4000px to support true 4K resolution screens (3840px)
+    if (cropped.height > 4000) {
+      cropped = img.copyResize(cropped, height: 4000, interpolation: img.Interpolation.linear);
     }
 
     await File(savePath).writeAsBytes(img.encodeJpg(cropped, quality: 85));
@@ -331,16 +325,27 @@ class _WallpaperFullScreenState extends State<WallpaperFullScreen> {
                   height: double.infinity,
                   width: double.infinity,
                   child: CachedNetworkImage(
-                    imageUrl: widget.photo?.src.large2x ?? widget.link,
+                    imageUrl: widget.link, // Main high-res image (Original)
                     fit: BoxFit.cover,
+                    filterQuality: FilterQuality.high,
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                          filterQuality: FilterQuality.high,
+                        ),
+                      ),
+                    ),
                     placeholder: (context, url) => CachedNetworkImage(
-                      imageUrl: widget.photo?.src.large ?? widget.link,
+                      imageUrl: widget.photo?.src.large2x ?? widget.link, // High-quality placeholder
                       fit: BoxFit.cover,
                       placeholder: (context, url) => Container(
                         color: Colors.black,
-                        child: const Center(child: CircularProgressIndicator()),
+                        child: const Center(child: CircularProgressIndicator(color: kJungleEmerald)),
                       ),
                     ),
+                    errorWidget: (context, url, error) => const Center(child: Icon(Icons.error, color: Colors.white)),
                   ),
                 ),
               ),
@@ -416,7 +421,7 @@ class _WallpaperFullScreenState extends State<WallpaperFullScreen> {
             AnimatedPositioned(
               duration: const Duration(milliseconds: 400),
               curve: Curves.easeOutCubic,
-              bottom: _showUI ? 40 : -200,
+              bottom: _showUI ? MediaQuery.of(context).padding.bottom + 20 : -200,
               left: 20,
               right: 20,
               child: AnimatedOpacity(
@@ -433,6 +438,7 @@ class _WallpaperFullScreenState extends State<WallpaperFullScreen> {
                         child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).primaryColor,
+                            shadowColor: Theme.of(context).primaryColor.withValues(alpha: 0.3),
                             foregroundColor: Theme.of(context).scaffoldBackgroundColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),

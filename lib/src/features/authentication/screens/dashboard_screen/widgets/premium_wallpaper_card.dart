@@ -5,6 +5,8 @@ import 'package:luminawall/src/constants/colors_strings.dart';
 import 'package:luminawall/src/features/authentication/models/wallpaper_model.dart';
 import 'package:luminawall/src/features/authentication/screens/wallpaper_full_screen/wallpaper_full_screen.dart';
 
+import '../../../controller/settings_controller.dart';
+
 class PremiumWallpaperCard extends StatelessWidget {
   final Photo photo;
   final String heroTag;
@@ -18,13 +20,22 @@ class PremiumWallpaperCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final thumbnailUrl = photo.src.large;
-    final highResUrl = photo.src.large2x;
+    final thumbnailUrl = photo.src.portrait.isNotEmpty ? photo.src.portrait : photo.src.large;
+    final highResUrl = photo.src.original;
 
     return Hero(
       tag: heroTag,
       child: GestureDetector(
-        onTap: () => Get.to(() => WallpaperFullScreen(highResUrl, photo: photo, heroTag: heroTag)),
+        onTap: () {
+          final settings = Get.find<SettingsController>();
+          final fullResUrl = settings.getDownloadUrl(
+            original: photo.src.original, 
+            large2x: photo.src.large2x, 
+            large: photo.src.large, 
+            medium: photo.src.medium,
+          );
+          Get.to(() => WallpaperFullScreen(fullResUrl, photo: photo, heroTag: heroTag));
+        },
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),

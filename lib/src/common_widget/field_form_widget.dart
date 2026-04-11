@@ -73,12 +73,8 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
                       color: isDark ? kJungleCream.withValues(alpha: 0.4) : Colors.grey)
                   : null),
           // Idle border
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide(
-              color: isDark ? kJungleCream.withValues(alpha: 0.1) : Colors.transparent,
-            ),
-          ),
+          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(color: isDark ? kJungleCream.withValues(alpha: 0.2) : kJungleGreen.withValues(alpha: 0.2), width: 1)),
           // Active focus border
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),

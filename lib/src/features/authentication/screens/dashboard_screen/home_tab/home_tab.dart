@@ -26,6 +26,89 @@ class _HomeTabState extends State<HomeTab> {
         pexelsController.fetchLatestWallpapers(isRefresh: false);
       }
     });
+
+    // Show selection on first time
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (pexelsController.isFirstTime()) {
+        _showInterestsSelection();
+      }
+    });
+  }
+
+  void _showInterestsSelection() {
+    final List<String> tempSelected = [];
+    final allCats = pexelsController.getMasterCategories();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    Get.bottomSheet(
+      StatefulBuilder(
+        builder: (context, setModalState) => Container(
+          height: MediaQuery.of(context).size.height * 0.8,
+          decoration: BoxDecoration(
+            color: isDark ? kJungleDeepGreen : Colors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+          ),
+          child: Column(
+            children: [
+              const SizedBox(height: 15),
+              Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey[400], borderRadius: BorderRadius.circular(10))),
+              const SizedBox(height: 25),
+              Text("Select Your Vibe", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: isDark ? Colors.white : kJungleDeepGreen)),
+              const SizedBox(height: 8),
+              Text("Choose at least 3 categories for your Home feed", style: TextStyle(color: isDark ? Colors.white60 : Colors.black54)),
+              const SizedBox(height: 20),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: allCats.map((cat) {
+                      final isSelected = tempSelected.contains(cat);
+                      return ChoiceChip(
+                        label: Text(cat),
+                        selected: isSelected,
+                        onSelected: (selected) {
+                          setModalState(() {
+                            if (selected) {
+                              tempSelected.add(cat);
+                            } else {
+                              tempSelected.remove(cat);
+                            }
+                          });
+                        },
+                        selectedColor: kJungleEmerald,
+                        labelStyle: TextStyle(color: isSelected ? Colors.white : (isDark ? Colors.white70 : Colors.black87)),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: tempSelected.length >= 3 ? kJungleEmerald : Colors.grey,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                    ),
+                    onPressed: tempSelected.length >= 3 ? () {
+                      pexelsController.saveUserCategories(tempSelected);
+                      Get.back();
+                    } : null,
+                    child: const Text("Curate My Feed", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      isScrollControlled: true,
+      enableDrag: false,
+    );
   }
 
   @override
@@ -36,22 +119,25 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: kJungleMossDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         children: [
           // Theme Background
           Positioned.fill(
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [
+                  colors: isDark ? [
                     kJungleDeepGreen,
                     kJungleMossDark,
+                  ] : [
+                    Colors.white,
+                    kJungleCream,
                   ],
                 ),
               ),
@@ -68,7 +154,7 @@ class _HomeTabState extends State<HomeTab> {
               Expanded(
                 child: RefreshIndicator(
                   color: kJungleEmerald,
-                  backgroundColor: kJungleMossDark,
+                  backgroundColor: isDark ? kJungleMossDark : Colors.white,
                   onRefresh: () async =>
                       await pexelsController.fetchLatestWallpapers(),
                   child: Obx(() {
@@ -80,22 +166,26 @@ class _HomeTabState extends State<HomeTab> {
                     }
 
                     if (pexelsController.latestPhotos.isEmpty) {
-                      return SingleChildScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        child: SizedBox(
-                          height: size.height * 0.7,
-                          child: Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.nature_people_rounded, size: 60, color: kJungleEmerald.withValues(alpha: 0.3)),
-                                const SizedBox(height: 16),
-                                Text(
-                                  noWallpapersFound,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: kJungleCream.withValues(alpha: 0.7)),
-                                ),
-                              ],
+                      return LayoutBuilder(
+                        builder: (context, constraints) => SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                            child: Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.nature_people_rounded, size: 60, color: kJungleEmerald.withValues(alpha: 0.3)),
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    noWallpapersFound,
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      color: isDark ? kJungleCream.withValues(alpha: 0.7) : kJungleMossDark.withValues(alpha: 0.7)
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

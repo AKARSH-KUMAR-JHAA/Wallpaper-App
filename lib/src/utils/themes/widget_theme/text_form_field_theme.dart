@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
 
+import '../../../constants/colors_strings.dart';
+
 class Textformfieldtheme {
   static InputDecorationTheme lighttextformfield = InputDecorationTheme(
-      labelStyle: TextStyle(color: Colors.grey,),
-      floatingLabelStyle: TextStyle(color: Colors.blue),
-      prefixIconColor: Colors.black,
-      fillColor: Colors.white,
+      labelStyle: const TextStyle(color: kJungleGreen),
+      floatingLabelStyle: const TextStyle(color: kJungleForestGreen),
+      prefixIconColor: kJungleGreen,
+      fillColor: kJungleCream.withValues(alpha: 0.3),
       filled: true,
-      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(7),
-          borderSide: BorderSide(color: Colors.black,width: 10,)),
-      focusedBorder: OutlineInputBorder( borderSide: BorderSide(color: Colors.blue,width: 2)),
-
+      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(color: kJungleGreen.withValues(alpha: 0.2), width: 1)),
+      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(15),
+          borderSide: const BorderSide(color: kJungleGreen, width: 2)),
       );
+
   static InputDecorationTheme darktextformfield = InputDecorationTheme(
-    labelStyle: TextStyle(color: Colors.grey,),
-    floatingLabelStyle: TextStyle(color: Colors.blue),
-    prefixIconColor: Colors.white,
-    fillColor: Colors.black,
+    labelStyle: const TextStyle(color: kJungleCream),
+    floatingLabelStyle: const TextStyle(color: kJungleEmerald),
+    prefixIconColor: kJungleCream,
+    fillColor: kJungleMossDark.withValues(alpha: 0.5),
     filled: true,
-    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(7),
-        borderSide: BorderSide(color: Colors.white,width: 1,)),
-    focusedBorder: OutlineInputBorder( borderSide: BorderSide(color: Colors.blue,width: 2)),
+    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(15),
+        borderSide: BorderSide(color: kJungleEmerald.withValues(alpha: 0.2), width: 1)),
+    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: kJungleEmerald, width: 2)),
   );
 }

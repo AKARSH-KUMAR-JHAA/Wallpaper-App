@@ -35,35 +35,25 @@ class _LiveWallpapersTabState extends State<LiveWallpapersTab> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: kJungleMossDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         children: [
           // Theme Background
           Positioned.fill(
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [
+                  colors: isDark ? [
                     kJungleDeepGreen,
                     kJungleMossDark,
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    kJungleDeepGreen,
-                    kJungleMossDark,
+                  ] : [
+                    Colors.white,
+                    kJungleCream,
                   ],
                 ),
               ),
@@ -80,7 +70,7 @@ class _LiveWallpapersTabState extends State<LiveWallpapersTab> {
               Expanded(
                 child: RefreshIndicator(
                   color: kJungleEmerald,
-                  backgroundColor: kJungleMossDark,
+                  backgroundColor: isDark ? kJungleMossDark : Colors.white,
                   onRefresh: () async =>
                       await pexelsController.fetchLiveWallpapers(),
                   child: Obx(() {
@@ -105,7 +95,7 @@ class _LiveWallpapersTabState extends State<LiveWallpapersTab> {
                                 fontSize: 14,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: 2,
-                                color: kJungleCream.withValues(alpha: 0.8),
+                                color: isDark ? kJungleCream.withValues(alpha: 0.8) : kJungleForestGreen.withValues(alpha: 0.8),
                               ),
                             ),
                           ),
@@ -124,7 +114,9 @@ class _LiveWallpapersTabState extends State<LiveWallpapersTab> {
                                     Text(
                                       "No Designs Found in your Region\nPull down to refresh",
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(color: kJungleCream.withValues(alpha: 0.5)),
+                                      style: TextStyle(
+                                        color: isDark ? kJungleCream.withValues(alpha: 0.5) : kJungleMossDark.withValues(alpha: 0.5)
+                                      ),
                                     ),
                                   ],
                                 ),

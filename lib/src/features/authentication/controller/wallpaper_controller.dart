@@ -1,11 +1,17 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import '../models/wallpaper_model.dart';
 
 class WallpaperController extends GetxController {
   static WallpaperController get instance => Get.find();
+
+  final _box = GetStorage();
+  static const String _categoriesKey = 'user_home_categories';
+  static const String _firstTimeKey = 'is_first_time_home';
 
   final String _apiKey = 'q8Zg7n7cTPErS6gqJCWBItSF2k00auOf2A4ew711fZj9FCrWHjvKhI4d'; 
   final RxList<Photo> latestPhotos = <Photo>[].obs;
@@ -26,29 +32,46 @@ class WallpaperController extends GetxController {
   int _videoPage = 1;
   String _currentSearchQuery = '';
 
+  final RxList<String> userHomeCategories = <String>[].obs;
+
   @override
   void onInit() {
     super.onInit();
+    _loadUserCategories();
     fetchLatestWallpapers();
     fetchCuratedWallpapers();
     fetchLiveWallpapers();
   }
 
-  final List<String> _homeQueries = [
-    'pure abstract art wallpaper',
-    'aerial nature landscape 8k',
-    'clean minimalist aesthetic',
-    'amoled black dark texture',
-    '3d geometry abstract render',
-    'hubble space nebula galaxy',
-    'empty city architecture skyline',
-    'macro nature texture photography',
-    'anime scenery landscape no people',
-    'vaporwave synthwave aesthetic',
-    'underwater oceanic life coral',
-    'northern lights aurora borealis',
-    'cyberpunk neon city night',
-    'macro flower petals 8k'
+  void _loadUserCategories() {
+    final List<dynamic>? saved = _box.read(_categoriesKey);
+    if (saved != null) {
+      userHomeCategories.value = saved.cast<String>();
+    } else {
+      // Default to everything IF its NOT the first time
+      if (!isFirstTime()) {
+        userHomeCategories.value = List<String>.from(_masterCategories);
+      }
+    }
+  }
+
+  void saveUserCategories(List<String> categories) {
+    userHomeCategories.value = categories;
+    _box.write(_categoriesKey, categories);
+    _box.write(_firstTimeKey, false); // Mark as no longer first time
+    fetchLatestWallpapers(isRefresh: true);
+  }
+
+  bool isFirstTime() => _box.read(_firstTimeKey) ?? true;
+
+  List<String> getMasterCategories() => _masterCategories;
+
+  final List<String> _masterCategories = [
+    'Nature', 'Abstract', 'Minimal', 'AMOLED', 'Space', 'City', 'Architecture', 
+    'Anime', 'Gaming', 'Movies', 'Celebrities', 'Animals', 'Cute', 'Quotes', 
+    'Typography', 'Cars', 'Bikes', 'Technology', 'Aesthetic', 'Dark', 'Neon', 
+    '3D', 'Fantasy', 'Art', 'Illustrations', 'Gradient', 'Patterns', 'Flowers', 
+    'Travel', 'Vintage'
   ];
 
   final List<String> _videoQueries = [
@@ -66,39 +89,69 @@ class WallpaperController extends GetxController {
 
   Future<void> fetchLatestWallpapers({bool isRefresh = true}) async {
     if (isLoadingMore.value || (isRefresh && isLoadingLatest.value)) return;
+    
+    // Safety check for first-time personalization
+    if (isFirstTime()) {
+      if (userHomeCategories.isEmpty) {
+        latestPhotos.clear();
+        return;
+      }
+    } else {
+      // If NOT first time but list is somehow empty (shouldn't happen), reload defaults
+      if (userHomeCategories.isEmpty) {
+        userHomeCategories.value = List<String>.from(_masterCategories);
+      }
+    }
 
     try {
       if (isRefresh) {
         _latestPage = 1;
-        _homeQueries.shuffle(); // Shuffle for maximum randomness
+        latestPhotos.clear();
         isLoadingLatest.value = true;
       } else {
         isLoadingMore.value = true;
       }
 
-      // Pick 5 random categories for maximum variety on a single load
-      final randomQueries = List<String>.from(_homeQueries)..shuffle();
-      final selectedQueries = randomQueries.take(5).toList();
+      // Pick random categories STRICTLY from user's choice list - broader sample (up to 10)
+      final randomQueries = List<String>.from(userHomeCategories)..shuffle();
+      final limit = userHomeCategories.length > 10 ? 10 : userHomeCategories.length;
+      final selectedQueries = randomQueries.take(limit).map((q) => "$q wallpaper portrait -people -person").toList();
       
       List<List<Photo>> multiResults = [];
       
-      // Fetch from multiple categories in parallel for speed and variety
+      // Fetch from up to 10 user-selected categories in parallel for a perfectly mixed grid
       await Future.wait(selectedQueries.map((query) async {
         try {
-          final response = await http.get(
-            Uri.parse(
-                'https://api.pexels.com/v1/search?query=$query&per_page=12&page=$_latestPage&orientation=portrait&locale=en-US'),
-            headers: {'Authorization': _apiKey},
-          );
+          // Task 1: Pexels API
+          final pexelsUrl = 'https://api.pexels.com/v1/search?query=$query&per_page=15&page=$_latestPage&orientation=portrait&locale=en-US';
+          final pexelsResponse = http.get(Uri.parse(pexelsUrl), headers: {'Authorization': _apiKey});
 
-          if (response.statusCode == 200) {
-            final data = json.decode(response.body);
-            final pexelsResponse = PexelsResponse.fromJson(data);
-            final safePhotos = pexelsResponse.photos.where((photo) => _isSafe(photo)).toList();
-            multiResults.add(safePhotos);
+          // Task 2: Wallhaven API (Sanitize query for artistic/anime pool + Force Portrait)
+          final wallQuery = query.replaceAll('wallpaper portrait -people -person', '').trim();
+          final wallhavenUrl = 'https://wallhaven.cc/api/v1/search?q=$wallQuery&categories=110&purity=100&ratios=9x16,10x16,9x18&page=$_latestPage&sorting=toplist&topRange=1M';
+          final wallhavenResponse = http.get(Uri.parse(wallhavenUrl));
+
+          final results = await Future.wait([pexelsResponse, wallhavenResponse]);
+          
+          final List<Photo> combinedList = [];
+
+          if (results[0].statusCode == 200) {
+            final data = json.decode(results[0].body);
+            final pResponse = PexelsResponse.fromJson(data);
+            combinedList.addAll(pResponse.photos.where((photo) => _isSafe(photo)));
+          }
+
+          if (results[1].statusCode == 200) {
+            final data = json.decode(results[1].body);
+            final wResponse = WallhavenResponse.fromJson(data);
+            combinedList.addAll(wResponse.photos.where((photo) => _isSafe(photo)));
+          }
+
+          if (combinedList.isNotEmpty) {
+            multiResults.add(combinedList);
           }
         } catch (e) {
-          debugPrint('Error fetching category $query: $e');
+          debugPrint('Dual-API Category Fetch Error: $e');
         }
       }));
 
@@ -147,7 +200,7 @@ class WallpaperController extends GetxController {
     
     final blackList = [
       'people', 'person', 'man', 'woman', 'model', 'human', 'face', 'portrait', 
-      'selfie', 'girl', 'boy', 'adult'
+      'selfie', 'girl', 'boy', 'adult', 'cosplay', 'costume'
     ];
     
     for (var word in blackList) {
@@ -187,39 +240,52 @@ class WallpaperController extends GetxController {
 
     try {
       if (isRefresh) {
-        _curatedPage = 1;
+        // Randomize the starting page for better discovery on refresh
+        _curatedPage = Random().nextInt(30) + 1; // 1 to 30
         isLoadingCurated.value = true;
       } else {
         isLoadingMore.value = true;
       }
 
-      // Pick 5 high-quality trending categories to interleave
-      final trendingQueries = [
-        'curated 8k wallpaper',
-        'cinematic photography masterpiece',
-        'high quality landscape 4k',
-        'premium texture aesthetic',
-        'world class architecture photography'
-      ];
+      // Randomly pick categories from master list for curated trending variety
+      final randomQueries = List<String>.from(_masterCategories)..shuffle();
+      final selectedQueries = randomQueries.take(8).map((q) => "$q cinematic 8k wallpaper -people -person").toList();
       
       List<List<Photo>> multiResults = [];
       
-      await Future.wait(trendingQueries.map((query) async {
+      // Dual-API fetch for every curated category
+      await Future.wait(selectedQueries.take(5).map((query) async {
         try {
-          final response = await http.get(
-            Uri.parse(
-                'https://api.pexels.com/v1/search?query=$query&per_page=12&page=$_curatedPage&orientation=portrait'),
-            headers: {'Authorization': _apiKey},
-          );
+          // Task 1: Pexels API
+          final pexelsUrl = 'https://api.pexels.com/v1/search?query=$query&per_page=12&page=$_curatedPage&orientation=portrait';
+          final pexelsResponse = http.get(Uri.parse(pexelsUrl), headers: {'Authorization': _apiKey});
 
-          if (response.statusCode == 200) {
-            final data = json.decode(response.body);
-            final pexelsResponse = PexelsResponse.fromJson(data);
-            final safePhotos = pexelsResponse.photos.where((photo) => _isSafe(photo)).toList();
-            multiResults.add(safePhotos);
+          // Task 2: Wallhaven API (mapping current query to artistic pool + Force Portrait)
+          final wallQuery = query.replaceAll('cinematic 8k wallpaper -people -person', '').trim();
+          final wallhavenUrl = 'https://wallhaven.cc/api/v1/search?q=$wallQuery&categories=110&purity=100&ratios=9x16,10x16,9x18&page=$_curatedPage&sorting=toplist&topRange=1M';
+          final wallhavenResponse = http.get(Uri.parse(wallhavenUrl));
+
+          final results = await Future.wait([pexelsResponse, wallhavenResponse]);
+          
+          final List<Photo> combinedList = [];
+
+          if (results[0].statusCode == 200) {
+            final data = json.decode(results[0].body);
+            final pResponse = PexelsResponse.fromJson(data);
+            combinedList.addAll(pResponse.photos.where((photo) => _isSafe(photo)));
+          }
+
+          if (results[1].statusCode == 200) {
+            final data = json.decode(results[1].body);
+            final wResponse = WallhavenResponse.fromJson(data);
+            combinedList.addAll(wResponse.photos.where((photo) => _isSafe(photo)));
+          }
+
+          if (combinedList.isNotEmpty) {
+            multiResults.add(combinedList);
           }
         } catch (e) {
-          debugPrint('Error fetching trending $query: $e');
+          debugPrint('Dual-API Trending Fetch Error: $e');
         }
       }));
 
@@ -271,8 +337,8 @@ class WallpaperController extends GetxController {
         isLoadingMore.value = true;
       }
 
-      String refinedQuery = query;
-      String url = 'https://api.pexels.com/v1/search?query=$refinedQuery&per_page=40&page=$_searchPage&orientation=portrait&locale=en-US';
+      String refinedQuery = "$query -people -person -human -man -woman";
+      String url = 'https://api.pexels.com/v1/search?query=${Uri.encodeComponent(refinedQuery)}&per_page=40&page=$_searchPage&orientation=portrait&locale=en-US';
       if (color != null && color.isNotEmpty) {
         url += '&color=$color';
       }

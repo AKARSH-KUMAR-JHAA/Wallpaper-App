@@ -51,7 +51,8 @@ class WallhavenController extends GetxController {
       // purity=100 (SFW)
       // sorting=relevance (Highest context match)
       // per_page=60 (Max allowed for standard API keys)
-      String url = 'https://wallhaven.cc/api/v1/search?q=$query&categories=110&purity=100&page=$_currentPage&sorting=toplist&topRange=1M';
+      // Request ONLY portrait ratios (9x16, 9x18, 10x16) for perfect phone fit
+      String url = 'https://wallhaven.cc/api/v1/search?q=$query&categories=110&purity=100&page=$_currentPage&sorting=toplist&topRange=1M&ratios=9x16,10x16,9x18';
       
       final response = await http.get(Uri.parse(url));
 

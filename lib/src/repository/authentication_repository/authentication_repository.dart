@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:luminawall/src/constants/colors_strings.dart';
 import 'package:luminawall/src/exception/exception.dart';
 import 'package:luminawall/src/exception/signup_email_password_failure.dart';
 import 'package:luminawall/src/features/authentication/screens/dashboard_screen/side_nav_bar/side_nav_bar.dart';
@@ -25,6 +27,9 @@ class AuthenticationRepository extends GetxController {
     firebaseUser = Rx<User?>(_auth.currentUser);
     firebaseUser.bindStream(_auth.userChanges());
     ever(firebaseUser, _setIntialScreen);
+    
+    // Initialize GoogleSignIn for version 7.x+
+    await GoogleSignIn.instance.initialize();
   }
 
   /// Manually refresh the user data to catch updates like updateDisplayName
@@ -41,7 +46,7 @@ class AuthenticationRepository extends GetxController {
     _setIntialScreen(firebaseUser.value);
   }
 
-  screenRedirect() async {
+  Future<void> screenRedirect() async {
     devicestorage.writeIfNull("IsFirstTime", true);
     if (devicestorage.read("IsFirstTime") != true) {
       Get.offAll(() => const WelcomeScreen());
@@ -50,7 +55,7 @@ class AuthenticationRepository extends GetxController {
     }
   }
 
-  _setIntialScreen(User? user) async {
+  Future<void> _setIntialScreen(User? user) async {
     if (!canRedirect) return;
     user == null ? screenRedirect() : Get.offAll(() => const SideNavBar());
   }
@@ -168,23 +173,27 @@ class AuthenticationRepository extends GetxController {
 
   Future<UserCredential?> signInWithGoogle() async {
     try {
-      // Trigger the authentication flow
-      final GoogleSignIn googleSignIn = GoogleSignIn(
+      // Trigger the authentication flow (v7.0.0+)
+      final googleSignIn = GoogleSignIn.instance;
+      
+      // Ensure it's initialized with the correct clientId for specific platforms
+      await googleSignIn.initialize(
         clientId: (defaultTargetPlatform == TargetPlatform.macOS || defaultTargetPlatform == TargetPlatform.iOS) 
             ? '953178718235-1ejcuscvmqtumm4ii6ohghvjg1uqrptb.apps.googleusercontent.com' 
             : null,
       );
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-      if (googleUser == null) return null;
+      final googleUser = await googleSignIn.authenticate();
 
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      // In v7.0+, accessToken is obtained via authorizeScopes
+      final authResult = await googleUser.authorizationClient.authorizeScopes(['email', 'profile']);
+      
+      // Obtain the idToken from the authentication property
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
+        accessToken: authResult.accessToken,
         idToken: googleAuth.idToken,
       );
 
@@ -192,14 +201,15 @@ class AuthenticationRepository extends GetxController {
       UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
 
       return userCredential;
+    } on GoogleSignInException catch (e) {
+      if (e.code == GoogleSignInExceptionCode.canceled) return null;
+      debugPrint("Google Sign-In Error: ${e.code}");
+      throw e.toString();
     } on FirebaseAuthException catch (e) {
       final ex = AExceptions.fromCode(e.code);
       throw ex.message;
     } catch (e) {
       debugPrint("Google Sign-In Detailed Error: $e");
-      if (e is Exception) {
-        throw e.toString();
-      }
       throw e.toString();
     }
   }
@@ -208,13 +218,19 @@ class AuthenticationRepository extends GetxController {
     try {
       await _auth.sendPasswordResetEmail(email: email);
       Future.delayed(const Duration(milliseconds: 100), () {
-        Get.snackbar("Success", "Reset link sent to $email",
-            backgroundColor: Colors.green.withValues(alpha: 0.1), colorText: Colors.green);
+        Fluttertoast.showToast(
+          msg: "Reset link sent to $email",
+          backgroundColor: kJungleEmerald,
+          textColor: Colors.white,
+        );
       });
     } on FirebaseAuthException catch (e) {
       Future.delayed(const Duration(milliseconds: 100), () {
-        Get.snackbar("Error", e.message ?? "Something went wrong",
-            backgroundColor: Colors.red.withValues(alpha: 0.1), colorText: Colors.red);
+        Fluttertoast.showToast(
+          msg: e.message ?? "Something went wrong",
+          backgroundColor: Colors.red.withValues(alpha: 0.8),
+          textColor: Colors.white,
+        );
       });
     }
   }
@@ -238,17 +254,12 @@ class AuthenticationRepository extends GetxController {
     Get.offAll(() => const WelcomeScreen());
   }
 
-  // Helper to safely show snackbars without "No Overlay" crash
   void _showSafeSnackbar(String title, String message, {bool isError = true}) {
-    if (!_hasOverlay()) return;
-    
-    Get.snackbar(
-      title, 
-      message,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: isError ? Colors.red.withValues(alpha: 0.1) : Colors.orange.withValues(alpha: 0.1),
-      colorText: isError ? Colors.red : Colors.orange,
-      duration: const Duration(seconds: 5),
+    Fluttertoast.showToast(
+      msg: "$title: $message",
+      backgroundColor: isError ? Colors.red.withValues(alpha: 0.8) : Colors.orange.withValues(alpha: 0.8),
+      textColor: Colors.white,
+      toastLength: Toast.LENGTH_LONG,
     );
   }
 

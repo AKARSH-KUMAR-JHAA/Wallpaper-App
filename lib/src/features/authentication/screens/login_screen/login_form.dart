@@ -74,7 +74,7 @@ class Loginform extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15)),
                       elevation: 5,
-                      shadowColor: Theme.of(context).primaryColor.withOpacity(0.3),
+                      shadowColor: Theme.of(context).primaryColor.withValues(alpha: 0.3),
                     ),
                     child: Text(
                       'LOGIN',

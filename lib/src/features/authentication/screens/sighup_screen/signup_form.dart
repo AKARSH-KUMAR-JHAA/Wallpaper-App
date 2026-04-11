@@ -120,8 +120,8 @@ class SignupForm extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide(
                                   color: Theme.of(context).brightness == Brightness.dark 
-                                      ? kJungleCream.withValues(alpha: 0.1) 
-                                      : Colors.transparent,
+                                      ? kJungleCream.withValues(alpha: 0.2) 
+                                      : kJungleGreen.withValues(alpha: 0.2),
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(

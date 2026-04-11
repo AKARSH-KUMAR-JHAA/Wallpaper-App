@@ -2,8 +2,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get.dart';
 
 import '../constants/colors_strings.dart';
 import '../features/authentication/controller/sidebar_controller.dart';
@@ -26,13 +25,13 @@ class StandardHeader extends StatelessWidget {
       drawerController = Get.find<MyDrawerController>();
     } catch (_) {}
 
+    final isDarkModeActive = Theme.of(context).brightness == Brightness.dark;
+
     return Material(
       type: MaterialType.transparency,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-
-        ),
+        decoration: const BoxDecoration(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -44,7 +43,7 @@ class StandardHeader extends StatelessWidget {
                   color: kJungleEmerald.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.menu_rounded,
                   size: 28,
                   color: kJungleEmerald,
@@ -60,11 +59,11 @@ class StandardHeader extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w900,
                           letterSpacing: 4,
-                          color: kJungleCream,
+                          color: isDarkModeActive ? kJungleCream : kJungleGreen,
                           fontSize: 20,
                           shadows: [
                             Shadow(
-                              color: Colors.black.withValues(alpha: 0.5),
+                              color: isDarkModeActive ? Colors.black.withValues(alpha: 0.5) : Colors.black.withValues(alpha: 0.1),
                               blurRadius: 10,
                               offset: const Offset(0, 2),
                             ),
@@ -77,7 +76,7 @@ class StandardHeader extends StatelessWidget {
                       child: Text(
                         subtitle!.toUpperCase(),
                         style: TextStyle(
-                          color: kJungleEmerald.withValues(alpha: 0.7),
+                          color: isDarkModeActive ? kJungleEmerald.withValues(alpha: 0.7) : kJungleForestGreen.withValues(alpha: 0.7),
                           fontWeight: FontWeight.bold,
                           fontSize: 9,
                           letterSpacing: 2,

@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:luminawall/src/features/authentication/models/user_model.dart';
+import 'package:luminawall/src/constants/colors_strings.dart';
 
 class UserRepository extends GetxController {
   static UserRepository get instance => Get.find();
@@ -10,59 +12,58 @@ class UserRepository extends GetxController {
 
   Future<void> createUser(UserModel user, String uid) async {
     await _db
-        .collection("users")
+        .collection("Users")
         .doc(uid)
-        .set(user.toJson())
+        .set(user.toJson(), SetOptions(merge: true))
         .whenComplete(() {
-      if (Get.context != null) {
-        ScaffoldMessenger.of(Get.context!).showSnackBar(
-          const SnackBar(content: Text("Account created successfully!")),
-        );
-      }
+      Fluttertoast.showToast(
+        msg: "Account created successfully!",
+        backgroundColor: kJungleEmerald,
+        textColor: Colors.white,
+      );
     }).catchError((error, stackTrace) {
+      Fluttertoast.showToast(
+        msg: "Something went wrong. Please try again.",
+        backgroundColor: Colors.red.withValues(alpha: 0.8),
+        textColor: Colors.white,
+      );
+    });
+  }
+
+  Future<void> updateUserDetails(Map<String, dynamic> data, String uid) async {
+    await _db
+        .collection("Users")
+        .doc(uid)
+        .set(data, SetOptions(merge: true))
+        .then((_) {
+      Fluttertoast.showToast(
+        msg: "Profile updated successfully!",
+        backgroundColor: kJungleEmerald,
+        textColor: Colors.white,
+      );
+    }).catchError((error) {
+      debugPrint("Profile Update Error: $error");
       if (Get.context != null) {
-        ScaffoldMessenger.of(Get.context!).showSnackBar(
-          SnackBar(
-            content: const Text("Something went wrong. Please try again."),
-            backgroundColor: Colors.red.withValues(alpha: 0.8),
-          ),
+        Fluttertoast.showToast(
+          msg: "Failed to update profile",
+          backgroundColor: Colors.red.withValues(alpha: 0.8),
+          textColor: Colors.white,
         );
       }
     });
   }
 
-  Future<void> updateUserDetails(UserModel user, String uid) async {
+  Future<void> updateSingleField(String field, dynamic value, String uid) async {
     await _db
-        .collection("users")
+        .collection("Users")
         .doc(uid)
-        .set(user.toJson(), SetOptions(merge: true))
-        .then((_) {
-      if (Get.context != null) {
-        ScaffoldMessenger.of(Get.context!).showSnackBar(
-          SnackBar(
-            content: const Text("Profile updated successfully!"),
-            backgroundColor: Colors.green.withValues(alpha: 0.8),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
-    }).catchError((error) {
-      debugPrint("Profile Update Error: $error");
-      if (Get.context != null) {
-        ScaffoldMessenger.of(Get.context!).showSnackBar(
-          SnackBar(
-            content: const Text("Failed to update profile"),
-            backgroundColor: Colors.red.withValues(alpha: 0.8),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
-    });
+        .update({field: value})
+        .catchError((error) => debugPrint("Error updating $field: $error"));
   }
 
   Future<void> deleteUser(String uid) async {
     await _db
-        .collection("users")
+        .collection("Users")
         .doc(uid)
         .delete()
         .catchError((error) => debugPrint("Error deleting user: $error"));

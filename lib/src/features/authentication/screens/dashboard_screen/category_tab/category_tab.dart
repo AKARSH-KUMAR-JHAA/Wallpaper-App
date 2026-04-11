@@ -23,7 +23,11 @@ class _CategoryTabState extends State<CategoryTab> {
   String? selectedColor;
 
   final List<String> categories = [
-    'Abstract', 'Nature', 'Landscapes', 'Minimalist', 'AMOLED', '3D', 'Space', 'Cityscapes', 'Animals', 'Anime', 'Pop Culture'
+    'Nature', 'Abstract', 'Minimal', 'AMOLED', 'Space', 'City', 'Architecture', 
+    'Anime', 'Gaming', 'Movies', 'Celebrities', 'Animals', 'Cute', 'Quotes', 
+    'Typography', 'Cars', 'Bikes', 'Technology', 'Aesthetic', 'Dark', 'Neon', 
+    '3D', 'Fantasy', 'Art', 'Illustrations', 'Gradient', 'Patterns', 'Flowers', 
+    'Travel', 'Vintage'
   ];
 
   final List<Map<String, dynamic>> colors = [
@@ -65,10 +69,13 @@ class _CategoryTabState extends State<CategoryTab> {
 
   bool _isWallhavenSearch(String query) {
     final lowerQuery = query.toLowerCase();
-    return lowerQuery.contains('anime') || 
-           lowerQuery.contains('superhero') || 
-           selectedCategory == 'Anime' || 
-           selectedCategory == 'Superheroes';
+    final wallhavenTags = [
+      'anime', 'gaming', 'superhero', 'fantasy', 'art', 'illustration', 
+      'cyberpunk', 'movies', 'celebrities', 'vector', 'manga'
+    ];
+    
+    return wallhavenTags.any((tag) => lowerQuery.contains(tag)) || 
+           (selectedCategory != null && wallhavenTags.any((tag) => selectedCategory!.toLowerCase().contains(tag)));
   }
 
   void _onSearch(String query) {
@@ -83,38 +90,28 @@ class _CategoryTabState extends State<CategoryTab> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: kJungleMossDark,
-      endDrawer: _buildFilterDrawer(context, true),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      resizeToAvoidBottomInset: false,
+      endDrawer: _buildFilterDrawer(context, isDark),
       body: Stack(
         children: [
           // Theme Background
           Positioned.fill(
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [
+                  colors: isDark ? [
                     kJungleDeepGreen,
                     kJungleMossDark,
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    kJungleDeepGreen,
-                    kJungleMossDark,
+                  ] : [
+                    Colors.white,
+                    kJungleCream,
                   ],
                 ),
               ),
@@ -136,7 +133,7 @@ class _CategoryTabState extends State<CategoryTab> {
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
-                          color: kJungleMossDark.withValues(alpha: 0.8),
+                          color: isDark ? kJungleMossDark.withValues(alpha: 0.8) : Colors.white.withValues(alpha: 0.8),
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(
                             color: kJungleEmerald.withValues(alpha: 0.2),
@@ -155,15 +152,15 @@ class _CategoryTabState extends State<CategoryTab> {
                           onSubmitted: _onSearch,
                           autocorrect: false,
                           enableSuggestions: false,
-                          style: const TextStyle(
-                            color: kJungleCream,
+                          style: TextStyle(
+                            color: isDark ? kJungleCream : kJungleMossDark,
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                           ),
                           decoration: InputDecoration(
                             hintText: "Search for vibes...",
                             hintStyle: TextStyle(
-                              color: kJungleCream.withValues(alpha: 0.4),
+                              color: isDark ? kJungleCream.withValues(alpha: 0.4) : kJungleMossDark.withValues(alpha: 0.4),
                               fontSize: 15,
                               fontWeight: FontWeight.w400,
                             ),
@@ -174,7 +171,7 @@ class _CategoryTabState extends State<CategoryTab> {
                             suffixIcon: searchController.text.isNotEmpty ? Padding(
                               padding: const EdgeInsets.only(right: 10),
                               child: IconButton(
-                                icon: const Icon(Icons.close_rounded, size: 22, color: kJungleCream),
+                                icon: Icon(Icons.close_rounded, size: 22, color: isDark ? kJungleCream : kJungleMossDark),
                                 onPressed: () {
                                   setState(() {
                                     searchController.clear();
@@ -226,22 +223,42 @@ class _CategoryTabState extends State<CategoryTab> {
                   final pexelsPhotos = pexelsController.searchPhotos;
                   final wallhavenPhotos = wallhavenController.wallhavenPhotos;
                   final Set<String> addedIds = {};
+                  final isArtQuery = _isWallhavenSearch(searchController.text);
                   
                   int maxLength = pexelsPhotos.length > wallhavenPhotos.length 
                       ? pexelsPhotos.length 
                       : wallhavenPhotos.length;
 
                   for (int i = 0; i < maxLength; i++) {
-                    if (i < pexelsPhotos.length) {
-                      if (!addedIds.contains(pexelsPhotos[i].id)) {
-                        combinedPhotos.add(pexelsPhotos[i]);
-                        addedIds.add(pexelsPhotos[i].id);
+                    // For art/anime queries, we HEAVILY prioritize Wallhaven to avoid realism/cosplay
+                    if (isArtQuery) {
+                      // Take 4 from Wallhaven for every 1 Pexels (better yet, skip Pexels for core Anime)
+                      if (i < wallhavenPhotos.length) {
+                        if (!addedIds.contains(wallhavenPhotos[i].id)) {
+                          combinedPhotos.add(wallhavenPhotos[i]);
+                          addedIds.add(wallhavenPhotos[i].id);
+                        }
                       }
-                    }
-                    if (i < wallhavenPhotos.length) {
-                      if (!addedIds.contains(wallhavenPhotos[i].id)) {
-                        combinedPhotos.add(wallhavenPhotos[i]);
-                        addedIds.add(wallhavenPhotos[i].id);
+                      // Only add a few Pexels to fill missing spots if it's not strictly 'anime'
+                      if (i < pexelsPhotos.length && !searchController.text.toLowerCase().contains('anime')) {
+                        if (i % 4 == 0 && !addedIds.contains(pexelsPhotos[i].id)) {
+                          combinedPhotos.add(pexelsPhotos[i]);
+                          addedIds.add(pexelsPhotos[i].id);
+                        }
+                      }
+                    } else {
+                      // Default 1:1 interleaving for nature/photography
+                      if (i < pexelsPhotos.length) {
+                        if (!addedIds.contains(pexelsPhotos[i].id)) {
+                          combinedPhotos.add(pexelsPhotos[i]);
+                          addedIds.add(pexelsPhotos[i].id);
+                        }
+                      }
+                      if (i < wallhavenPhotos.length) {
+                        if (!addedIds.contains(wallhavenPhotos[i].id)) {
+                          combinedPhotos.add(wallhavenPhotos[i]);
+                          addedIds.add(wallhavenPhotos[i].id);
+                        }
                       }
                     }
                   }
@@ -259,14 +276,17 @@ class _CategoryTabState extends State<CategoryTab> {
                           const SizedBox(height: 16),
                           Text(
                             "Find your perfect vibe",
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(color: kJungleCream),
+                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: isDark ? kJungleCream : kJungleGreen,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             "Explore millions of high-quality wallpapers",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                  color: kJungleCream.withValues(alpha: 0.5),
+                                  color: isDark ? kJungleCream.withValues(alpha: 0.5) : kJungleMossDark.withValues(alpha: 0.5),
                                   fontSize: 14,
                                   height: 1.5,
                                 ),
@@ -281,7 +301,7 @@ class _CategoryTabState extends State<CategoryTab> {
                       Expanded(
                         child: RefreshIndicator(
                           color: kJungleEmerald,
-                          backgroundColor: kJungleMossDark,
+                          backgroundColor: isDark ? kJungleMossDark : Colors.white,
                           onRefresh: () async {
                             _onSearch(searchController.text);
                           },

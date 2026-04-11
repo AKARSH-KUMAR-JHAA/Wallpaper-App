@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:luminawall/src/common_widget/field_form_widget.dart';
 import 'package:luminawall/src/features/authentication/models/field_form_model.dart';
 
@@ -53,7 +53,11 @@ class _BmiScreenState extends State<BmiScreen> {
 
                         }
                         else{
-                          Get.snackbar('Empty', 'Please fill all the fields');
+                          Fluttertoast.showToast(
+                            msg: 'Please fill all the fields',
+                            backgroundColor: Colors.red.withValues(alpha: 0.8),
+                            textColor: Colors.white,
+                          );
                         }
                       },
                       child: Text(

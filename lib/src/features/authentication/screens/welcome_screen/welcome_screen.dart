@@ -14,21 +14,25 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: kJungleMossDark,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Stack(
         children: [
           // Background Forest Gradient
           Positioned.fill(
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [
+                  colors: isDark ? [
                     kJungleDeepGreen,
                     kJungleMossDark,
+                  ] : [
+                    Colors.white,
+                    kJungleCream,
                   ],
                 ),
               ),
@@ -41,7 +45,7 @@ class WelcomeScreen extends StatelessWidget {
             left: 0,
             right: 0,
             child: Opacity(
-              opacity: 0.6,
+              opacity: isDark ? 0.6 : 0.4,
               child: Lottie.asset(
                 welcomeAni1,
                 height: size.height * 0.35,
@@ -56,7 +60,7 @@ class WelcomeScreen extends StatelessWidget {
             left: 0,
             right: 0,
             child: Opacity(
-              opacity: 0.5,
+              opacity: isDark ? 0.5 : 0.3,
               child: Lottie.asset(
                 welcomeAni2,
                 height: size.height * 0.4,
@@ -85,13 +89,13 @@ class WelcomeScreen extends StatelessWidget {
                   welcomeheadline,
                   textAlign: TextAlign.center,
                   style: theme.textTheme.headlineLarge?.copyWith(
-                    color: kJungleCream,
+                    color: isDark ? kJungleCream : kJungleGreen,
                     fontWeight: FontWeight.bold,
                     fontSize: 50,
                     shadows: [
                       Shadow(
                         blurRadius: 15,
-                        color: Colors.black.withValues(alpha: 0.5),
+                        color: isDark ? Colors.black.withValues(alpha: 0.5) : Colors.black.withValues(alpha: 0.1),
                         offset: const Offset(0, 4),
                       )
                     ],
@@ -102,7 +106,7 @@ class WelcomeScreen extends StatelessWidget {
                   welcomebody,
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodyLarge?.copyWith(
-                    color: kJungleCream.withValues(alpha: 0.8),
+                    color: isDark ? kJungleCream.withValues(alpha: 0.8) : kJungleDeepGreen.withValues(alpha: 0.8),
                     fontSize: 18,
                     height: 1.4,
                   ),
@@ -143,8 +147,8 @@ class WelcomeScreen extends StatelessWidget {
                         child: OutlinedButton(
                           onPressed: () => Get.to(() => const SignupScreen()),
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: kJungleCream,
-                            side: const BorderSide(color: kJungleCream, width: 2),
+                            foregroundColor: isDark ? kJungleCream : kJungleGreen,
+                            side: BorderSide(color: isDark ? kJungleCream : kJungleGreen, width: 2),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),

@@ -3,12 +3,16 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:luminawall/src/constants/colors_strings.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:async_wallpaper/async_wallpaper.dart';
 import 'package:luminawall/src/features/authentication/models/wallpaper_model.dart';
 import 'package:gal/gal.dart';
 import 'package:path_provider/path_provider.dart';
+
+import '../../controller/favorites_controller.dart';
 
 class LiveWallpaperFullScreen extends StatefulWidget {
   final Video video;
@@ -82,8 +86,10 @@ class _LiveWallpaperFullScreenState extends State<LiveWallpaperFullScreen> {
     } catch (e) {
       debugPrint("Video Init Error: $e");
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to load video preview: $e')),
+        Fluttertoast.showToast(
+          msg: 'Failed to load video preview: $e',
+          backgroundColor: Colors.red.withValues(alpha: 0.8),
+          textColor: Colors.white,
         );
       }
     }
@@ -125,18 +131,19 @@ class _LiveWallpaperFullScreenState extends State<LiveWallpaperFullScreen> {
       await Gal.putVideo(file.path);
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Live Wallpaper Saved to Gallery'),
-            backgroundColor: Theme.of(context).primaryColor,
-            behavior: SnackBarBehavior.floating,
-          ),
+        Fluttertoast.showToast(
+          msg: 'Live Wallpaper Saved to Gallery',
+          backgroundColor: kJungleEmerald,
+          textColor: Colors.white,
+          toastLength: Toast.LENGTH_LONG,
         );
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.toString()}')),
+        Fluttertoast.showToast(
+          msg: 'Error: ${e.toString()}',
+          backgroundColor: Colors.red.withValues(alpha: 0.8),
+          textColor: Colors.white,
         );
       }
     }
@@ -144,8 +151,10 @@ class _LiveWallpaperFullScreenState extends State<LiveWallpaperFullScreen> {
 
   Future<void> _setLiveWallpaper() async {
     if (Platform.isIOS) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("iOS does not support setting live wallpapers directly.")),
+      Fluttertoast.showToast(
+        msg: "iOS does not support setting live wallpapers directly.",
+        backgroundColor: Colors.orange.withValues(alpha: 0.9),
+        textColor: Colors.white,
       );
       return;
     }
@@ -170,11 +179,10 @@ class _LiveWallpaperFullScreenState extends State<LiveWallpaperFullScreen> {
 
       if (mounted) {
         if (result) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Live wallpaper setup started"),
-              backgroundColor: Colors.green,
-            ),
+          Fluttertoast.showToast(
+            msg: "Live wallpaper setup started",
+            backgroundColor: kJungleEmerald,
+            textColor: Colors.white,
           );
         } else {
           throw Exception("Could not initialize wallpaper service");
@@ -182,11 +190,11 @@ class _LiveWallpaperFullScreenState extends State<LiveWallpaperFullScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Failed to set live wallpaper: $e"),
-            backgroundColor: Colors.red,
-          ),
+        Fluttertoast.showToast(
+          msg: "Failed to set live wallpaper: $e",
+          backgroundColor: Colors.red.withValues(alpha: 0.8),
+          textColor: Colors.white,
+          toastLength: Toast.LENGTH_LONG,
         );
       }
       debugPrint("Live Wallpaper Error: $e");
@@ -270,7 +278,7 @@ class _LiveWallpaperFullScreenState extends State<LiveWallpaperFullScreen> {
               ),
             ),
 
-            // Right Sidebar (Share)
+            // Right Sidebar (Like & Share)
             AnimatedPositioned(
               duration: const Duration(milliseconds: 400),
               curve: Curves.easeOutCubic,
@@ -281,6 +289,21 @@ class _LiveWallpaperFullScreenState extends State<LiveWallpaperFullScreen> {
                 opacity: _showUI ? 1.0 : 0.0,
                 child: Column(
                   children: [
+                    // Like Button
+                    Obx(() {
+                      final favoritesController = Get.find<FavoritesController>();
+                      final isFav = favoritesController.isFavoriteLive(widget.video.id);
+                      return _buildSidebarButton(
+                        icon: isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                        color: isFav ? Colors.redAccent : Colors.white,
+                        onTap: () {
+                          favoritesController.toggleFavoriteLive(widget.video);
+                          _startHideTimer();
+                        },
+                      );
+                    }),
+                    const SizedBox(height: 20),
+                    // Share Button
                     _buildSidebarButton(
                       icon: Icons.share_rounded,
                       onTap: () {
@@ -297,7 +320,7 @@ class _LiveWallpaperFullScreenState extends State<LiveWallpaperFullScreen> {
             AnimatedPositioned(
               duration: const Duration(milliseconds: 400),
               curve: Curves.easeOutCubic,
-              bottom: _showUI ? 40 : -200,
+              bottom: _showUI ? MediaQuery.of(context).padding.bottom + 20 : -200,
               left: 20,
               right: 20,
               child: AnimatedOpacity(

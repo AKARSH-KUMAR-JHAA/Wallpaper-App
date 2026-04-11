@@ -21,8 +21,10 @@ class LoginScreen extends StatelessWidget {
     final bottomAnimHeight = size.height * 0.25;
     final controller = Get.put(LoginController());
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: kJungleMossDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       // Fixed background even when keyboard appears
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -30,13 +32,16 @@ class LoginScreen extends StatelessWidget {
           // Background Depth
           Positioned.fill(
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [
+                  colors: isDark ? [
                     kJungleDeepGreen,
                     kJungleMossDark,
+                  ] : [
+                    Colors.white,
+                    kJungleCream,
                   ],
                 ),
               ),

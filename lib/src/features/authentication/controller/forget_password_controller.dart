@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:luminawall/src/constants/colors_strings.dart';
 import '../../../repository/authentication_repository/authentication_repository.dart';
 import '../screens/dashboard_screen/side_nav_bar/side_nav_bar.dart';
 import '../screens/forget_password_screen/forget_pass_otp/forget_pass_otp.dart';
@@ -20,10 +22,11 @@ class ForgetPasswordController extends GetxController {
     String emailStr = email.text.trim();
     if (emailStr.isEmpty) {
       Future.delayed(const Duration(milliseconds: 100), () {
-        Get.snackbar("Error", "Please enter your email",
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red.withValues(alpha: 0.1),
-            colorText: Colors.red);
+        Fluttertoast.showToast(
+          msg: "Please enter your email",
+          backgroundColor: Colors.red.withValues(alpha: 0.8),
+          textColor: Colors.white,
+        );
       });
       return;
     }
@@ -43,10 +46,11 @@ class ForgetPasswordController extends GetxController {
     String phoneStr = phone.text.trim();
     if (phoneStr.isEmpty) {
       Future.delayed(const Duration(milliseconds: 100), () {
-        Get.snackbar("Error", "Please enter your phone number",
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red.withValues(alpha: 0.1),
-            colorText: Colors.red);
+        Fluttertoast.showToast(
+          msg: "Please enter your phone number",
+          backgroundColor: Colors.red.withValues(alpha: 0.8),
+          textColor: Colors.white,
+        );
       });
       return;
     }
@@ -71,20 +75,22 @@ class ForgetPasswordController extends GetxController {
 
     if (pass.isEmpty || confirm.isEmpty) {
       Future.delayed(const Duration(milliseconds: 100), () {
-        Get.snackbar("Error", "All fields are required",
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red.withValues(alpha: 0.1),
-            colorText: Colors.red);
+        Fluttertoast.showToast(
+          msg: "All fields are required",
+          backgroundColor: Colors.red.withValues(alpha: 0.8),
+          textColor: Colors.white,
+        );
       });
       return;
     }
 
     if (pass != confirm) {
       Future.delayed(const Duration(milliseconds: 100), () {
-        Get.snackbar("Error", "Passwords do not match",
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red.withValues(alpha: 0.1),
-            colorText: Colors.red);
+        Fluttertoast.showToast(
+          msg: "Passwords do not match",
+          backgroundColor: Colors.red.withValues(alpha: 0.8),
+          textColor: Colors.white,
+        );
       });
       return;
     }
@@ -93,8 +99,11 @@ class ForgetPasswordController extends GetxController {
     try {
       await AuthenticationRepository.instance.updatePassword(pass);
       Future.delayed(const Duration(milliseconds: 100), () {
-        Get.snackbar("Success", "Password updated successfully",
-            backgroundColor: Colors.green.withValues(alpha: 0.1), colorText: Colors.green);
+        Fluttertoast.showToast(
+          msg: "Password updated successfully",
+          backgroundColor: kJungleEmerald,
+          textColor: Colors.white,
+        );
       });
       
       // Delay to let user see success
@@ -102,10 +111,12 @@ class ForgetPasswordController extends GetxController {
       Get.offAll(() => const SideNavBar()); // Redirect to dashboard
     } catch (e) {
       Future.delayed(const Duration(milliseconds: 100), () {
-        Get.snackbar("Error", e.toString(),
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red.withValues(alpha: 0.1),
-            colorText: Colors.red);
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          backgroundColor: Colors.red.withValues(alpha: 0.8),
+          textColor: Colors.white,
+          toastLength: Toast.LENGTH_LONG,
+        );
       });
     } finally {
       isLoading.value = false;

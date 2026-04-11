@@ -18,6 +18,7 @@ class FooterSignupWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final controller = Get.put(LoginController());
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
@@ -26,20 +27,20 @@ class FooterSignupWidget extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                  child: Divider(color: kJungleCream.withValues(alpha: 0.2))),
+                  child: Divider(color: (isDark ? kJungleCream : kJungleGreen).withValues(alpha: 0.2))),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Text(
                   'OR',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: kJungleCream.withValues(alpha: 0.5),
+                        color: (isDark ? kJungleCream : kJungleGreen).withValues(alpha: 0.5),
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.2,
                       ),
                 ),
               ),
               Expanded(
-                  child: Divider(color: kJungleCream.withValues(alpha: 0.2))),
+                  child: Divider(color: (isDark ? kJungleCream : kJungleGreen).withValues(alpha: 0.2))),
             ],
           ),
           const SizedBox(height: 15),
@@ -51,8 +52,8 @@ class FooterSignupWidget extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
-                side: BorderSide(color: kJungleCream.withValues(alpha: 0.3)),
-                backgroundColor: Colors.white.withValues(alpha: 0.05),
+                side: BorderSide(color: (isDark ? kJungleCream : kJungleGreen).withValues(alpha: 0.3)),
+                backgroundColor: isDark ? Colors.white.withValues(alpha: 0.05) : kJungleGreen.withValues(alpha: 0.05),
               ),
               icon: const Image(
                 image: AssetImage('assets/images/sign_up_images/R.png'),
@@ -62,7 +63,7 @@ class FooterSignupWidget extends StatelessWidget {
                 'Sign in with Google',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: kJungleCream,
+                      color: isDark ? kJungleCream : kJungleGreen,
                     ),
               ),
             ),
@@ -73,7 +74,7 @@ class FooterSignupWidget extends StatelessWidget {
             child: RichText(
                 text: TextSpan(
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: kJungleCream.withValues(alpha: 0.7),
+                          color: (isDark ? kJungleCream : kJungleGreen).withValues(alpha: 0.7),
                         ),
                     children: [
                   TextSpan(text: '$txt1 '),

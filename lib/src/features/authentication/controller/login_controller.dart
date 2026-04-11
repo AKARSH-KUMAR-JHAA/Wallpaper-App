@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../exception/signup_email_password_failure.dart';
 import '../../../repository/authentication_repository/authentication_repository.dart';
@@ -34,7 +35,7 @@ class LoginController extends GetxController {
       
       if (uid != null) {
         // Fetch user data from Firestore to get phone number
-        final snapshot = await FirebaseFirestore.instance.collection("users").doc(uid).get();
+        final snapshot = await FirebaseFirestore.instance.collection("Users").doc(uid).get();
         
         if (snapshot.exists) {
           final phoneNo = snapshot.data()?['PhoneNo'];
@@ -46,7 +47,6 @@ class LoginController extends GetxController {
             
             // Trigger Phone Auth and Navigate to OTP Screen
             await AuthenticationRepository.instance.phoneAuthentication(phoneNo);
-            
             isLoading.value = false;
             // Use the same OTP screen as signup
             Get.to(() => const ForgetPassOtp());
@@ -63,12 +63,11 @@ class LoginController extends GetxController {
     } catch (e) {
       isLoading.value = false;
       String errorMessage = e is SignUpEmailPasswordFailure ? e.message : e.toString();
-      Get.snackbar(
-        'Error',
-        errorMessage,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.withAlpha(200),
-        colorText: Colors.white,
+      Fluttertoast.showToast(
+        msg: "Error: $errorMessage",
+        backgroundColor: Colors.red.withValues(alpha: 0.8),
+        textColor: Colors.white,
+        toastLength: Toast.LENGTH_LONG,
       );
     }
   }
@@ -86,21 +85,16 @@ class LoginController extends GetxController {
       final context = Get.context;
       if (context != null) {
         Future.delayed(const Duration(milliseconds: 600), () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                e.toString().contains('network_error') 
-                    ? 'Network issue detected. Please check your internet.' 
-                    : 'Sign-in failed. Please try again.',
-                style: const TextStyle(color: Colors.white),
-              ),
+          if (Get.context != null && Get.context!.mounted) {
+            Fluttertoast.showToast(
+              msg: e.toString().contains('network_error') 
+                  ? 'Network issue detected. Please check your internet.' 
+                  : 'Sign-in failed. Please try again.',
               backgroundColor: Colors.red.withValues(alpha: 0.9),
-              behavior: SnackBarBehavior.floating,
-              margin: const EdgeInsets.all(20),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              duration: const Duration(seconds: 4),
-            ),
-          );
+              textColor: Colors.white,
+              toastLength: Toast.LENGTH_LONG,
+            );
+          }
         });
       }
     }

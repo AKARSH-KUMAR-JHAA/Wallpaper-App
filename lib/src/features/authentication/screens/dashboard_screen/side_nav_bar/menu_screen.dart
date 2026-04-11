@@ -22,7 +22,6 @@ class Menuitems {
     favourites,
     notifications,
     settings,
-    rate,
     about
   ];
 }
@@ -38,16 +37,21 @@ class MenuScreen extends StatelessWidget {
     final authRepo = AuthenticationRepository.instance;
     final profileController = Get.put(ProfileController());
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: kJungleMossDark,
+      backgroundColor: isDark ? kJungleMossDark : kJungleCream,
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
+            colors: isDark ? [
               kJungleMossDark,
               Colors.black.withValues(alpha: 0.8),
+            ] : [
+              kJungleCream,
+              Colors.white,
             ],
           ),
         ),
@@ -60,7 +64,7 @@ class MenuScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
                 child: Obx(() {
                   final firestoreUser = profileController.userModel.value;
-                  final currentUser = authRepo.firebaseUser.value; // Access reactively inside Obx
+                  final currentUser = authRepo.firebaseUser.value; 
                   
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,12 +82,17 @@ class MenuScreen extends StatelessWidget {
                           ],
                         ),
                         child: CircleAvatar(
+                          key: ValueKey(firestoreUser?.profilePicture ?? 'menu-default'),
                           radius: 35,
                           backgroundColor: kJungleEmerald,
-                          backgroundImage: currentUser?.photoURL != null
-                              ? NetworkImage(currentUser!.photoURL!)
-                              : null,
-                          child: currentUser?.photoURL == null
+                          backgroundImage: profileController.pickedImage.value != null
+                              ? FileImage(profileController.pickedImage.value!) as ImageProvider
+                              : (firestoreUser?.profilePicture != null && firestoreUser!.profilePicture!.isNotEmpty
+                                  ? NetworkImage(firestoreUser.profilePicture!)
+                                  : (currentUser?.photoURL != null ? NetworkImage(currentUser!.photoURL!) : null)),
+                          child: profileController.pickedImage.value == null &&
+                                 (firestoreUser?.profilePicture == null || firestoreUser!.profilePicture!.isEmpty) && 
+                                 currentUser?.photoURL == null
                               ? Builder(
                                   builder: (context) {
                                     final name = firestoreUser?.fullName ?? currentUser?.displayName ?? currentUser?.email ?? "U";
@@ -103,13 +112,13 @@ class MenuScreen extends StatelessWidget {
                       const SizedBox(height: 15),
                       Text(
                         (firestoreUser?.fullName ?? currentUser?.displayName ?? "Lumina Explorer").toUpperCase(),
-                        style: const TextStyle(
-                          color: kJungleCream,
+                        style: TextStyle(
+                          color: isDark ? kJungleCream : kJungleGreen,
                           fontSize: 18,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 2,
                           shadows: [
-                            Shadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 2)),
+                            Shadow(color: isDark ? Colors.black26 : Colors.black12, blurRadius: 4, offset: const Offset(0, 2)),
                           ],
                         ),
                       ),
@@ -117,7 +126,7 @@ class MenuScreen extends StatelessWidget {
                       Text(
                         firestoreUser?.email ?? currentUser?.email ?? "PREMIUM NATURE MEMBER",
                         style: TextStyle(
-                          color: kJungleEmerald.withValues(alpha: 0.8),
+                          color: isDark ? kJungleEmerald.withValues(alpha: 0.8) : kJungleForestGreen.withValues(alpha: 0.8),
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 1.2,
@@ -150,13 +159,13 @@ class MenuScreen extends StatelessWidget {
                 child: TextButton.icon(
                   onPressed: () {
                     AuthenticationRepository.instance.logout();
-                    GoogleSignIn().signOut();
+                    GoogleSignIn.instance.signOut();
                   },
-                  icon: const Icon(Icons.logout_rounded, color: Colors.white54),
-                  label: const Text(
+                  icon: Icon(Icons.logout_rounded, color: isDark ? Colors.white54 : kJungleDeepGreen.withValues(alpha: 0.6)),
+                  label: Text(
                     "LOGOUT",
                     style: TextStyle(
-                      color: Colors.white54,
+                      color: isDark ? Colors.white54 : kJungleDeepGreen.withValues(alpha: 0.6),
                       fontSize: 13,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 3,
@@ -173,6 +182,7 @@ class MenuScreen extends StatelessWidget {
 
   Widget buildMenuItem(BuildContext context, Menuitem item) {
     final isSelected = currentItem == item;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       decoration: BoxDecoration(
@@ -184,13 +194,13 @@ class MenuScreen extends StatelessWidget {
         minLeadingWidth: 20,
         leading: Icon(
           item.icon,
-          color: isSelected ? kJungleEmerald : kJungleCream.withValues(alpha: 0.4),
+          color: isSelected ? kJungleEmerald : (isDark ? kJungleCream.withValues(alpha: 0.4) : kJungleGreen.withValues(alpha: 0.4)),
           size: 24,
         ),
         title: Text(
           item.title.toUpperCase(),
           style: TextStyle(
-            color: isSelected ? Colors.white : kJungleCream.withValues(alpha: 0.4),
+            color: isSelected ? (isDark ? Colors.white : kJungleGreen) : (isDark ? kJungleCream.withValues(alpha: 0.4) : kJungleGreen.withValues(alpha: 0.4)),
             fontSize: 14,
             fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
             letterSpacing: 2,

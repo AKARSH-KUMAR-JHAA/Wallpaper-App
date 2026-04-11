@@ -10,35 +10,25 @@ class AboutUsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: kJungleMossDark,
+      backgroundColor: isDark ? kJungleMossDark : Colors.white,
       body: Stack(
         children: [
           // Theme Background
           Positioned.fill(
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [
+                  colors: isDark ? [
                     kJungleDeepGreen,
                     kJungleMossDark,
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    kJungleDeepGreen,
-                    kJungleMossDark,
+                  ] : [
+                    Colors.white,
+                    kJungleCream,
                   ],
                 ),
               ),
@@ -79,10 +69,10 @@ class AboutUsTab extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 25),
-                            const Text(
+                            Text(
                               "LUMINA WALL",
                               style: TextStyle(
-                                    color: kJungleCream,
+                                    color: isDark ? kJungleCream : kJungleMossDark,
                                     fontSize: 24,
                                     fontWeight: FontWeight.w900,
                                     letterSpacing: 2,
@@ -91,7 +81,7 @@ class AboutUsTab extends StatelessWidget {
                             Text(
                               "VERSION 1.0.0",
                               style: TextStyle(
-                                color: kJungleCream.withValues(alpha: 0.5),
+                                color: (isDark ? kJungleCream : kJungleMossDark).withValues(alpha: 0.5),
                                 fontSize: 10,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 1.5,
@@ -101,24 +91,24 @@ class AboutUsTab extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 50),
-                      _buildSectionHeader("OUR MISSION"),
+                      _buildSectionHeader(context, "OUR MISSION"),
                       const SizedBox(height: 15),
                       Text(
                         "LuminaWall was born out of a passion for digital art and personalization. We believe that your phone's wallpaper is a reflection of your mood, your style, and your vibe. Our mission is to provide the highest quality 4K wallpapers from the best photographers worldwide, right at your fingertips.",
                         style: TextStyle(
                               height: 1.8,
-                              color: kJungleCream.withValues(alpha: 0.7),
+                              color: (isDark ? kJungleCream : kJungleMossDark).withValues(alpha: 0.7),
                               fontSize: 14,
                             ),
                       ),
                       const SizedBox(height: 35),
-                      _buildSectionHeader("CONNECTED WITH PEXELS"),
+                      _buildSectionHeader(context, "CONNECTED WITH PEXELS"),
                       const SizedBox(height: 15),
                       Text(
                         "All our images are served by the Pexels API, ensuring a diverse and constantly updated collection of stunning visuals under the Pexels License.",
                         style: TextStyle(
                               height: 1.8,
-                              color: kJungleCream.withValues(alpha: 0.7),
+                              color: (isDark ? kJungleCream : kJungleMossDark).withValues(alpha: 0.7),
                               fontSize: 14,
                             ),
                       ),
@@ -127,7 +117,7 @@ class AboutUsTab extends StatelessWidget {
                         child: Text(
                           "MADE WITH ❤️ BY AKARSH",
                           style: TextStyle(
-                                color: kJungleEmerald.withValues(alpha: 0.8),
+                                color: (isDark ? kJungleEmerald : kJungleGreen).withValues(alpha: 0.8),
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: 2,
                                 fontSize: 11,
@@ -146,19 +136,20 @@ class AboutUsTab extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(BuildContext context, String title) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       children: [
         Container(
           width: 3,
           height: 15,
-          color: kJungleEmerald,
+          color: isDark ? kJungleEmerald : kJungleGreen,
         ),
         const SizedBox(width: 8),
         Text(
           title,
-          style: const TextStyle(
-            color: kJungleEmerald,
+          style: TextStyle(
+            color: isDark ? kJungleEmerald : kJungleGreen,
             fontWeight: FontWeight.w900,
             fontSize: 12,
             letterSpacing: 1.5,

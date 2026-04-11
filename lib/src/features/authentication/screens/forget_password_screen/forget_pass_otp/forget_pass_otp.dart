@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:luminawall/src/features/authentication/screens/forget_password_screen/forget_header_widget.dart';
 import 'package:luminawall/src/features/authentication/controller/otp_controller.dart';
@@ -49,7 +50,12 @@ class ForgetPassOtp extends StatelessWidget {
                 focusedBorderColor: Theme.of(context).primaryColor,
                 showFieldAsBox: true,
                 borderRadius: BorderRadius.circular(12),
-                fieldWidth: 40,
+                fieldWidth: 45,
+                textStyle: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white : Colors.black,
+                ),
                 handleControllers: (controllers) {
                   // You can use this to sync if needed, but the library also provides onCodeChanged
                 },
@@ -62,28 +68,35 @@ class ForgetPassOtp extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 40),
-              SizedBox(
-                height: 55,
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (otpController.otp.value.length == 6) {
-                      otpController.verifyotp(otpController.otp.value);
-                    } else {
-                      Get.snackbar("Error", "Please enter 6-digit OTP",
-                          snackPosition: SnackPosition.BOTTOM,
-                          backgroundColor: Colors.red.withValues(alpha: 0.1),
-                          colorText: Colors.red);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                    elevation: 5,
-                    shadowColor: Theme.of(context).primaryColor.withValues(alpha: 0.3),
-                  ),
-                  child: const Text(
-                    verify,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              Obx(
+                () => SizedBox(
+                  height: 55,
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: otpController.isLoading.value 
+                      ? null 
+                      : () {
+                          if (otpController.otp.value.length == 6) {
+                            otpController.verifyotp(otpController.otp.value);
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: "Please enter 6-digit OTP",
+                                backgroundColor: Colors.red.withValues(alpha: 0.8),
+                                textColor: Colors.white,
+                            );
+                          }
+                        },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                      elevation: 5,
+                      shadowColor: Theme.of(context).primaryColor.withValues(alpha: 0.3),
+                    ),
+                    child: otpController.isLoading.value 
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : const Text(
+                            verify,
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
                   ),
                 ),
               ),

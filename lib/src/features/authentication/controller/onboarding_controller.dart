@@ -39,6 +39,6 @@ class OnboardingController extends GetxController{
       ),
     ),
   ];
-  onPageChangedCallback(int activepageindex) => currentpage.value =activepageindex;
-  skip() => controller.jumpToPage(page: 2);
+  int onPageChangedCallback(int activepageindex) => currentpage.value =activepageindex;
+  dynamic skip() => controller.jumpToPage(page: 2);
 }

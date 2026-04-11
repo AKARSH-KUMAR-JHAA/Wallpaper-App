@@ -49,6 +49,18 @@ subprojects {
             force 'androidx.browser:browser:1.8.0'
             force 'androidx.core:core:1.13.1'
             force 'androidx.core:core-ktx:1.13.1'
+            force 'androidx.activity:activity:1.9.3'
+            force 'androidx.activity:activity-ktx:1.9.3'
+            force 'androidx.fragment:fragment:1.8.5'
+            force 'androidx.fragment:fragment-ktx:1.8.5'
+            force 'androidx.lifecycle:lifecycle-viewmodel:2.8.7'
+            force 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
+            force 'androidx.lifecycle:lifecycle-runtime:2.8.7'
+            force 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.7'
+            force 'androidx.navigation:navigation-common:2.8.5'
+            force 'androidx.navigation:navigation-runtime:2.8.5'
+            force 'androidx.navigation:navigation-fragment:2.8.5'
+            force 'androidx.navigation:navigation-ui:2.8.5'
         }
     }
 }

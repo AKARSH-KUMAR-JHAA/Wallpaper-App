@@ -42,12 +42,12 @@ class Photo {
 
   factory Photo.fromJson(Map<String, dynamic> json) {
     return Photo(
-      id: json['id'].toString(),
+      id: (json['id'] ?? '').toString(),
       photographer: json['photographer'] ?? 'Pexels Photographer',
       photographerUrl: json['photographer_url'] ?? '',
       alt: json['alt'] ?? '',
       avgColor: json['avg_color'] ?? '#000000',
-      src: Src.fromJson(json['src']),
+      src: Src.fromJson(json['src'] as Map<String, dynamic>? ?? {}),
     );
   }
 
@@ -62,6 +62,8 @@ class Photo {
     };
   }
 }
+
+// ... (Src class remains the same)
 
 class Src {
   final String original;
@@ -86,14 +88,14 @@ class Src {
 
   factory Src.fromJson(Map<String, dynamic> json) {
     return Src(
-      original: json['original'],
-      large2x: json['large2x'],
-      large: json['large'],
-      medium: json['medium'],
-      small: json['small'],
-      portrait: json['portrait'],
-      landscape: json['landscape'],
-      tiny: json['tiny'],
+      original: json['original'] ?? '',
+      large2x: json['large2x'] ?? '',
+      large: json['large'] ?? '',
+      medium: json['medium'] ?? '',
+      small: json['small'] ?? '',
+      portrait: json['portrait'] ?? '',
+      landscape: json['landscape'] ?? '',
+      tiny: json['tiny'] ?? '',
     );
   }
 
@@ -126,9 +128,9 @@ class PexelsVideoResponse {
 
   factory PexelsVideoResponse.fromJson(Map<String, dynamic> json) {
     return PexelsVideoResponse(
-      page: json['page'],
-      perPage: json['per_page'],
-      videos: List<Video>.from(json['videos'].map((x) => Video.fromJson(x))),
+      page: json['page'] ?? 1,
+      perPage: json['per_page'] ?? 15,
+      videos: List<Video>.from((json['videos'] as List? ?? []).map((x) => Video.fromJson(x))),
       nextPage: json['next_page'],
     );
   }
@@ -159,18 +161,31 @@ class Video {
 
   factory Video.fromJson(Map<String, dynamic> json) {
     return Video(
-      id: json['id'].toString(),
+      id: (json['id'] ?? '').toString(),
       width: json['width'] ?? 0,
       height: json['height'] ?? 0,
       url: json['url'] ?? '',
       image: json['image'] ?? '',
       duration: json['duration'] ?? 0,
-      user: User.fromJson(json['user'] ?? {}),
+      user: User.fromJson(json['user'] as Map<String, dynamic>? ?? {}),
       videoFiles: List<VideoFile>.from(
           (json['video_files'] as List? ?? []).map((x) => VideoFile.fromJson(x))),
       videoPictures: List<VideoPicture>.from(
           (json['video_pictures'] as List? ?? []).map((x) => VideoPicture.fromJson(x))),
     );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'width': width,
+      'height': height,
+      'url': url,
+      'image': image,
+      'duration': duration,
+      'user': user.toJson(),
+      'video_files': videoFiles.map((x) => x.toJson()).toList(),
+      'video_pictures': videoPictures.map((x) => x.toJson()).toList(),
+    };
   }
 }
 
@@ -191,6 +206,14 @@ class User {
       name: json['name'] ?? 'Pexels User',
       url: json['url'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'url': url,
+    };
   }
 }
 
@@ -221,6 +244,17 @@ class VideoFile {
       link: json['link'] ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'quality': quality,
+      'file_type': fileType,
+      'width': width,
+      'height': height,
+      'link': link,
+    };
+  }
 }
 
 class VideoPicture {
@@ -240,6 +274,14 @@ class VideoPicture {
       picture: json['picture'] ?? '',
       nr: json['nr'] ?? 0,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'picture': picture,
+      'nr': nr,
+    };
   }
 }
 

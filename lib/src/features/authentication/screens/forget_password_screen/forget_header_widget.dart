@@ -16,6 +16,7 @@ class ForgetHeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -30,11 +31,11 @@ class ForgetHeaderWidget extends StatelessWidget {
             title,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: kJungleCream,
+                  color: isDark ? kJungleCream : kJungleGreen,
                   shadows: [
                     Shadow(
                       blurRadius: 10,
-                      color: Colors.black.withValues(alpha: 0.3),
+                      color: isDark ? Colors.black.withValues(alpha: 0.3) : Colors.black.withValues(alpha: 0.1),
                       offset: const Offset(0, 2),
                     )
                   ],
@@ -48,7 +49,7 @@ class ForgetHeaderWidget extends StatelessWidget {
               subtitle,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: kJungleCream.withValues(alpha: 0.6),
+                    color: isDark ? kJungleCream.withValues(alpha: 0.6) : kJungleDeepGreen.withValues(alpha: 0.6),
                   ),
             ),
           ),

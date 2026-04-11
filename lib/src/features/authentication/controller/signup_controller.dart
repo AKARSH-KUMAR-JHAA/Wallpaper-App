@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../../repository/authentication_repository/authentication_repository.dart';
 import '../../../repository/user_repository/user_repository.dart';
 import '../models/user_model.dart';
@@ -70,11 +71,12 @@ class SignUpController extends GetxController {
       if (errorMessage.contains('email-already-in-use')) {
         // ... (existing error handling)
         Future.delayed(const Duration(milliseconds: 500), () {
-          Get.snackbar("Account Exists", "This email is already registered. If you didn't receive OTP, we're resending it now.",
-              snackPosition: SnackPosition.BOTTOM,
-              duration: const Duration(seconds: 5),
-              backgroundColor: Colors.orange.withValues(alpha: 0.1),
-              colorText: Colors.orange);
+          Fluttertoast.showToast(
+            msg: "Account Exists: This email is already registered.",
+            backgroundColor: Colors.orange.withValues(alpha: 0.9),
+            textColor: Colors.white,
+            toastLength: Toast.LENGTH_LONG,
+          );
         });
             
         await AuthenticationRepository.instance.phoneAuthentication(user.phoneNo);
@@ -83,10 +85,12 @@ class SignUpController extends GetxController {
       }
 
       Future.delayed(const Duration(milliseconds: 500), () {
-        Get.snackbar("Registration Failed", errorMessage,
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red.withValues(alpha: 0.1),
-            colorText: Colors.red);
+        Fluttertoast.showToast(
+          msg: "Registration Failed: $errorMessage",
+          backgroundColor: Colors.red.withValues(alpha: 0.8),
+          textColor: Colors.white,
+          toastLength: Toast.LENGTH_LONG,
+        );
       });
     }
   }
